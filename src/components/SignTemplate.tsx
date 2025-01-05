@@ -5,7 +5,7 @@ function SignTemplate() {
     <>
       <div className="h-full w-full bg-gradient-to-br from-indigo-800 to-orange-800 via-slate-950 flex justify-center items-center relative z-0 overflow-hidden">
         <div
-          className="text-black text-6xl lg:text-8xl font-extrabold -rotate-45 scale-150 select-none text-nowrap"
+          className="text-black text-8xl font-extrabold -rotate-45 scale-150 select-none text-nowrap"
           style={{ fontStretch: 'extra-expanded' }}
         >
           {Array(7)
