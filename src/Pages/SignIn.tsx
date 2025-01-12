@@ -62,7 +62,7 @@ function SignIn() {
               )}
             />
             <Button className="bg-yellow-200" type="submit">
-              Sign Up
+              Sign In
             </Button>
           </form>
         </Form>
@@ -73,9 +73,9 @@ function SignIn() {
         transition={{ duration: 0.3, delay: 0.5, ease: 'linear' }}
         className="bg-white h-16 mt-5 rounded-lg flex justify-center items-center"
       >
-        <h1>Already have an account?</h1>
+        <h1>Forgot Password?</h1>
         <Button variant="link" className="text-blue-500">
-          Sign In
+          Reset
         </Button>
       </motion.div>
     </div>
