@@ -1,4 +1,4 @@
-import SignTemplate from '@/components/SignTemplate';
+import SignTemplate from '@/Layouts/SignTemplate';
 import { Outlet } from 'react-router';
 
 function HomeLayout() {
