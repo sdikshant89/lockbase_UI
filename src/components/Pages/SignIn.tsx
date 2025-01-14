@@ -8,16 +8,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import googleIcon from '@/icons/google.png';
+import metaIcon from '@/icons/meta.png';
+import xIcon from '@/icons/x.png';
 import { zodResolver } from '@hookform/resolvers/zod';
-// import { Separator } from '@/components/ui/separator';
-// import googleIcon from '@/icons/google.png';
-// import metaIcon from '@/icons/meta.png';
-// import xIcon from '@/icons/x.png';
 import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import * as motion from 'motion/react-client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Separator } from '../ui/separator';
 
 function SignIn() {
   const [viewPass, setViewPass] = useState(false);
@@ -75,7 +75,15 @@ function SignIn() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Password</FormLabel>
+                    <Button
+                      variant="link"
+                      className="p-0 text-right font-light"
+                    >
+                      Forgot Password?
+                    </Button>
+                  </div>
                   <FormControl>
                     <div className="relative flex justify-start items-center gap-3">
                       <Input
@@ -99,12 +107,14 @@ function SignIn() {
             </Button>
           </form>
         </Form>
-        {/* <div className="flex justify-center items-center w-28">
+        <div className="flex justify-center items-center w-28 my-1">
           <Separator className="bg-gray-500" />{' '}
-          <span className="text-gray-400 mx-2 text-nowrap">OR</span>
+          <span className="text-gray-400 mx-2 text-nowrap">
+            OR continue with
+          </span>
           <Separator className="bg-gray-500 " />
         </div>
-        <div className="h-12 my-2 flex justify-center items-center overflow-hidden">
+        <div className="h-12 w-full mt-2 mb-4 flex justify-center items-center overflow-hidden">
           <Button className="h-full shadow-none">
             <img
               src={googleIcon}
@@ -113,16 +123,16 @@ function SignIn() {
             />
           </Button>
           <Button className="h-full shadow-none">
-            <img src={xIcon} alt="X" className="w-full h-full object-contain" />
-          </Button>
-          <Button className="h-full shadow-none">
             <img
               src={metaIcon}
               alt="Meta"
               className="w-full h-full object-contain"
             />
           </Button>
-        </div> */}
+          <Button className="h-full shadow-none">
+            <img src={xIcon} alt="X" className="w-full h-full object-contain" />
+          </Button>
+        </div>
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -130,9 +140,9 @@ function SignIn() {
         transition={{ duration: 0.3, delay: 0.5, ease: 'linear' }}
         className="bg-white h-16 mt-5 rounded-lg flex justify-center items-center"
       >
-        <h1>Forgot Password?</h1>
-        <Button variant="link" className="text-blue-500 text-md">
-          Reset
+        <h1>Don't have an account?</h1>
+        <Button variant="link" className="text-blue-500 text-md p-2">
+          Sign Up
         </Button>
       </motion.div>
     </div>
