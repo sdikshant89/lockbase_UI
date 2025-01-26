@@ -79,7 +79,7 @@ function SignIn() {
                     <FormLabel>Password</FormLabel>
                     <Button
                       variant="link"
-                      className="p-0 text-right font-light"
+                      className="p-0 text-right font-light text-blue-600"
                     >
                       Forgot Password?
                     </Button>
