@@ -1,3 +1,6 @@
+import googleIcon from '@/components/icons/google.png';
+import metaIcon from '@/components/icons/meta.png';
+import xIcon from '@/components/icons/x.png';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -8,9 +11,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import googleIcon from '@/icons/google.png';
-import metaIcon from '@/icons/meta.png';
-import xIcon from '@/icons/x.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import * as motion from 'motion/react-client';

@@ -12,6 +12,13 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+
+          {/* ToDo */}
+          <Route path="/:username/sign-up/SecQue" element={<SignUp />} />
+          <Route path="/:username/sign-up/2fa" element={<SignUp />} />
+
+          {/* Secured path */}
+          <Route path="/:username/sign-in/2fa" element={<SignUp />} />
         </Route>
       </Routes>
     </>
