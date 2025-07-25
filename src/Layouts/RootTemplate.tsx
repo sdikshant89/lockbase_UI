@@ -3,7 +3,7 @@ function RootTemplate() {
 
   return (
     <>
-      <div className="h-full w-full bg-gradient-to-br from-indigo-800 to-orange-800 via-slate-950 flex justify-center items-center relative z-0 overflow-hidden">
+      <div className="h-full w-full bg-linear-to-br from-indigo-800 to-orange-800 via-slate-950 flex justify-center items-center relative z-0 overflow-hidden">
         <div
           className="text-black text-8xl font-extrabold -rotate-45 scale-150 select-none text-nowrap"
           style={{ fontStretch: 'extra-expanded' }}

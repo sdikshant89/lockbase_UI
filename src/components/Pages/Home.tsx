@@ -6,10 +6,7 @@ import { Link } from 'react-router';
 
 function Home() {
   return (
-    <div
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-        w-11/12 sm:w-96 md:w-1/2 lg:w-1/3 xl:w-1/4 h-auto max-w-md max-h-[80vh]"
-    >
+    <div className="w-11/12 sm:w-96 md:w-1/2 lg:w-1/3 xl:w-1/4 h-auto max-w-md max-h-[80vh]">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -17,7 +14,7 @@ function Home() {
         className="rounded-lg flex flex-col justify-center items-center gap-y-10"
       >
         <h1
-          className="h-auto mx-4 pt-6 font-semibold text-6xl sm:text-8xl text-center text-wrap text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-orange-400"
+          className="h-auto mx-4 pt-6 font-semibold text-6xl sm:text-8xl text-center text-wrap text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
           style={{ fontStretch: 'extra-expanded' }}
         >
           Lockdɒƨɘ
@@ -39,7 +36,7 @@ function Home() {
           <span>Already Have an account?</span>
           <Button
             variant="link"
-            className="transition ease-in-out delay-100 text-md sm:text-lg hover:-translate-y-1 hover:scale-110 hover:font-bold duration-300 text-indigo-300"
+            className="transition ease-in-out delay-100 text-md sm:text-lg hover:-translate-y-1 hover:scale-110 hover:font-bold duration-200 text-blue-600"
           >
             <Link to="/sign-in">Sign In</Link>
           </Button>

@@ -48,7 +48,7 @@ function SignIn() {
         className="bg-white rounded-lg flex flex-col justify-center items-center"
       >
         <h1
-          className="h-auto mx-4 pt-6 font-semibold text-5xl text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-orange-400"
+          className="h-auto mx-4 pt-6 font-semibold text-5xl text-center text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
           style={{ fontStretch: 'extra-expanded' }}
         >
           Lockdɒƨɘ
