@@ -16,6 +16,7 @@ import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import * as motion from 'motion/react-client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router';
 import { z } from 'zod';
 import { Separator } from '../ui/separator';
 
@@ -141,9 +142,11 @@ function SignIn() {
         className="bg-white h-16 mt-5 rounded-lg flex justify-center items-center"
       >
         <h1>Don't have an account?</h1>
-        <Button variant="link" className="text-blue-500 text-md p-2">
-          Sign Up
-        </Button>
+        <Link to="/sign-up">
+          <Button variant="link" className="text-blue-500 text-md p-2">
+            Sign Up
+          </Button>
+        </Link>
       </motion.div>
     </div>
   );

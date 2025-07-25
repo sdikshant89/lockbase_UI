@@ -1,10 +1,10 @@
-import SignTemplate from '@/Layouts/SignTemplate';
+import RootTemplate from '@/Layouts/RootTemplate';
 import { Outlet } from 'react-router';
 
 function HomeLayout() {
   return (
     <>
-      <SignTemplate />
+      <RootTemplate />
       <Outlet />
     </>
   );

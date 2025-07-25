@@ -22,11 +22,13 @@ function Home() {
         >
           Lockdɒƨɘ
         </h1>
-        <Button className="transition ease-in-out bg-white delay-100 text-black hover:-translate-y-1 hover:scale-110 hover:font-bold duration-300 flex justify-center items-center gap-x-1">
-          {' '}
-          <Link to="/sign-up">Sign Up</Link>
-          <ChevronRightIcon className="text-black " />
-        </Button>
+        <Link to="/sign-up">
+          <Button className="transition ease-in-out bg-white delay-100 text-black hover:-translate-y-1 hover:scale-110 hover:font-bold duration-300 flex justify-center items-center gap-x-1">
+            {' '}
+            Sign Up
+            <ChevronRightIcon className="text-black " />
+          </Button>
+        </Link>
         <div className="flex justify-center items-center w-1/3 sm:w-1/2 -my-5">
           <Separator className="bg-gray-500 " />{' '}
           <span className="text-gray-400 mx-2">OR</span>

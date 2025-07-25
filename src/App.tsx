@@ -20,6 +20,7 @@ function App() {
 
           {/* Secured path */}
           <Route path="/:username/sign-in/2fa" element={<SignUp />} />
+          <Route path="/:username/sign-in/SecQue" element={<SignUp />} />
         </Route>
       </Routes>
     </>

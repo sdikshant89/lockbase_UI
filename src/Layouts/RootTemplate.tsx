@@ -1,4 +1,4 @@
-function SignTemplate() {
+function RootTemplate() {
   const phrases = ['Lockbase Lockbase', 'ɘƨɒdʞɔo⅃ ɘƨɒdʞɔo⅃'];
 
   return (
@@ -19,4 +19,4 @@ function SignTemplate() {
   );
 }
 
-export default SignTemplate;
+export default RootTemplate;
