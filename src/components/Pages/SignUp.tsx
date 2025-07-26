@@ -63,7 +63,7 @@ export default function SignUp() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.1, ease: 'linear' }}
-        className="bg-white rounded-lg flex flex-col justify-center items-center"
+        className="bg-white dark:bg-gray-800 rounded-lg flex flex-col justify-center items-center"
       >
         <h1
           className="h-auto mx-4 pt-6 font-semibold text-5xl text-center text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
@@ -81,7 +81,9 @@ export default function SignUp() {
               name="fullname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <div className="mb-1">
+                    <FormLabel>Full Name</FormLabel>
+                  </div>
                   <FormControl>
                     <Input placeholder="Rick C-137" {...field} />
                   </FormControl>
@@ -94,7 +96,9 @@ export default function SignUp() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <div className="mb-1">
+                    <FormLabel>Email</FormLabel>
+                  </div>
                   <FormControl>
                     <Input placeholder="mail@loackbase.com" {...field} />
                   </FormControl>
@@ -107,10 +111,13 @@ export default function SignUp() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <div className="mb-1">
+                    <FormLabel>Password</FormLabel>
+                  </div>
                   <FormControl>
                     <div className="relative flex justify-start items-center gap-3">
                       <Input
+                        className="w-[90%]"
                         type={viewPass ? 'text' : 'password'}
                         placeholder="password"
                         {...field}
@@ -131,11 +138,13 @@ export default function SignUp() {
               name="cell"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cell No</FormLabel>
+                  <div className="mb-1">
+                    <FormLabel>Cell No</FormLabel>
+                  </div>
                   <FormControl>
                     <div className="flex justify-start items-center gap-x-2">
                       <Select>
-                        <SelectTrigger className="w-20">
+                        <SelectTrigger className="w-[30%]">
                           <SelectValue placeholder="Code" />
                         </SelectTrigger>
                         <SelectContent>
@@ -152,7 +161,7 @@ export default function SignUp() {
               )}
             />
             <Button
-              className="bg-yellow-200 hover:font-bold mt-2"
+              className="bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02]"
               type="submit"
             >
               Sign Up
@@ -164,7 +173,7 @@ export default function SignUp() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.5, ease: 'linear' }}
-        className="bg-white h-16 mt-5 rounded-lg flex justify-center items-center"
+        className="bg-white dark:bg-gray-800  h-16 mt-5 rounded-lg flex justify-center items-center"
       >
         <h1>Already have an account</h1>
         <Button variant="link" className="text-blue-500 text-md">

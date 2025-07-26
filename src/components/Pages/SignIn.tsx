@@ -45,13 +45,13 @@ function SignIn() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.1, ease: 'linear' }}
-        className="bg-white rounded-lg flex flex-col justify-center items-center"
+        className="bg-white dark:bg-gray-800 rounded-lg flex flex-col justify-center items-center"
       >
         <h1
           className="h-auto mx-4 pt-6 font-semibold text-5xl text-center text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
           style={{ fontStretch: 'extra-expanded' }}
         >
-          Lockdɒƨɘ
+          Lockbase
         </h1>
         <Form {...form}>
           <form
@@ -63,7 +63,9 @@ function SignIn() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <div className="mb-2">
+                    <FormLabel>Email</FormLabel>
+                  </div>
                   <FormControl>
                     <Input placeholder="mail@loackbase.com" {...field} />
                   </FormControl>
@@ -80,7 +82,7 @@ function SignIn() {
                     <FormLabel>Password</FormLabel>
                     <Button
                       variant="link"
-                      className="p-0 text-right font-light text-blue-600"
+                      className="p-0 text-right font-light text-blue-600 dark:text-blue-400"
                     >
                       Forgot Password?
                     </Button>
@@ -103,7 +105,10 @@ function SignIn() {
                 </FormItem>
               )}
             />
-            <Button className="bg-yellow-200 hover:font-bold" type="submit">
+            <Button
+              className="bg-yellow-200 dark:bg-amber-300 text-black hover:font-bold transition-all hover:scale-[1.02]"
+              type="submit"
+            >
               Sign In
             </Button>
           </form>
@@ -139,7 +144,7 @@ function SignIn() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.5, ease: 'linear' }}
-        className="bg-white h-16 mt-5 rounded-lg flex justify-center items-center"
+        className="bg-white dark:bg-gray-800 h-16 mt-5 rounded-lg flex justify-center items-center"
       >
         <h1>Don't have an account?</h1>
         <Link to="/sign-up">
