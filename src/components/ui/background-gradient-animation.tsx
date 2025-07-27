@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@/components/custom/theme-provider';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 
@@ -39,11 +40,21 @@ export const BackgroundGradientAnimation = ({
   const [curY, setCurY] = useState(0);
   const [tgX, setTgX] = useState(0);
   const [tgY, setTgY] = useState(0);
+
+  const { theme } = useTheme();
+
+  const [bgStart, setBgStart] = useState(gradientBackgroundStart);
+
   useEffect(() => {
-    document.body.style.setProperty(
-      '--gradient-background-start',
-      gradientBackgroundStart
-    );
+    if (theme === 'dark') {
+      setBgStart('rgb(0, 0, 0)');
+    } else {
+      setBgStart('rgb(108, 0, 162)');
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    document.body.style.setProperty('--gradient-background-start', bgStart);
     document.body.style.setProperty(
       '--gradient-background-end',
       gradientBackgroundEnd
@@ -56,7 +67,7 @@ export const BackgroundGradientAnimation = ({
     document.body.style.setProperty('--pointer-color', pointerColor);
     document.body.style.setProperty('--size', size);
     document.body.style.setProperty('--blending-value', blendingValue);
-  }, []);
+  }, [bgStart]);
 
   useEffect(() => {
     function move() {
