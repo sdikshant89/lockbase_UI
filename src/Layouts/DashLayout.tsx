@@ -7,7 +7,7 @@ function DashLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="flex flex-col w-full bg-zinc-400">
+      <div className="flex flex-col w-full bg-indigo-100 dark:bg-zinc-400 mt-4 mr-4 mb-4 border-none rounded-2xl overflow-hidden">
         <AppHeader />
         <Outlet />
       </div>
