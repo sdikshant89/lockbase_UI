@@ -4,6 +4,7 @@ import Home from './components/Pages/Home';
 import Mfa from './components/Pages/Mfa';
 import SignIn from './components/Pages/SignIn';
 import SignUp from './components/Pages/SignUp';
+import WelcomePage from './components/Pages/Welcome';
 import DashLayout from './Layouts/DashLayout';
 import HomeLayout from './Layouts/HomeLayout';
 
@@ -28,6 +29,7 @@ function App() {
 
           {/* <Route element={<RequireAuth />}> */}
           <Route path="/:username" element={<DashLayout />}>
+            <Route index element={<WelcomePage />} />
             <Route path="dash" />
             <Route path="generator" />
             <Route path="vault" />

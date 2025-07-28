@@ -32,12 +32,14 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="mb-2">
-        <h1
-          className="h-auto py-2 font-semibold text-2xl sm:text-4xl text-center text-wrap text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
-          style={{ fontStretch: 'extra-expanded' }}
-        >
-          {state === 'collapsed' ? 'LB' : 'Lockbase'}
-        </h1>
+        <Link to={''}>
+          <h1
+            className="h-auto py-2 font-semibold text-2xl sm:text-4xl text-center text-wrap text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
+            style={{ fontStretch: 'extra-expanded' }}
+          >
+            {state === 'collapsed' ? 'LB' : 'Lockbase'}
+          </h1>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>

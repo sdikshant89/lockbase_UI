@@ -13,7 +13,7 @@ function AppHeader() {
   };
 
   return (
-    <div className="flex items-center justify-between bg-blue-400 dark:bg-black ps-6 pe-2 text-white">
+    <div className="flex items-center justify-between bg-blue-400 dark:bg-zinc-950 ps-6 pe-2 text-white">
       <div className="py-5 flex justify-start items-center gap-3  dark:text-zinc-200">
         <SidebarTrigger className="scale-[1.25] hover:scale-150 transition-all hover:bg-transparent shadow-none dark:text-white" />
         <Separator orientation="vertical" className="font-extrabold" />
