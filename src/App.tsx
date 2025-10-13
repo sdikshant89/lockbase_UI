@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router';
 import { ThemeProvider } from './components/custom/theme-provider';
 import Home from './components/Pages/Home';
 import Mfa from './components/Pages/Mfa';
+import SecQue from './components/Pages/SecQue';
 import SignIn from './components/Pages/SignIn';
 import SignUp from './components/Pages/SignUp';
 import WelcomePage from './components/Pages/Welcome';
@@ -19,7 +20,7 @@ function App() {
             <Route path="/sign-up" element={<SignUp />} />
 
             {/* Add Sign Up flow route */}
-            <Route path="/:username/sign-up/SecQue" element={<SignUp />} />
+            <Route path="/:username/sign-up/SecQue" element={<SecQue />} />
             <Route path="/:username/sign-up/2fa" element={<Mfa />} />
 
             {/* Add Sign Ip flow route */}

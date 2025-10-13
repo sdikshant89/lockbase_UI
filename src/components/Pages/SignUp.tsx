@@ -69,7 +69,7 @@ export default function SignUp() {
           className="h-auto mx-4 pt-6 font-semibold text-5xl text-center text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
           style={{ fontStretch: 'extra-expanded' }}
         >
-          Lockdɒƨɘ
+          Lockbase
         </h1>
         <Form {...form}>
           <form
