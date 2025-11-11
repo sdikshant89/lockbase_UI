@@ -1,3 +1,4 @@
+import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router';
 import { ThemeProvider } from './components/custom/theme-provider';
 import Home from './components/Pages/Home';
@@ -8,10 +9,11 @@ import SignUp from './components/Pages/SignUp';
 import WelcomePage from './components/Pages/Welcome';
 import DashLayout from './Layouts/DashLayout';
 import HomeLayout from './Layouts/HomeLayout';
+import { store } from './store/store';
 
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Routes>
           <Route path="/" element={<HomeLayout />}>
@@ -38,7 +40,7 @@ function App() {
           {/* </Route> */}
         </Routes>
       </ThemeProvider>
-    </>
+    </Provider>
   );
 }
 

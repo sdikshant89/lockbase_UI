@@ -159,7 +159,8 @@ const WelcomePage = () => {
             >
               Your ultimate password management solution. Securely store,
               generate, and manage all your passwords with military-grade
-              encryption and seamless cross-platform synchronization.
+              encryption and seamless cross-platform synchronization. Stats
+              defined below are made up btw.
             </motion.p>
 
             <motion.div
