@@ -44,11 +44,12 @@ export default function SignUp() {
       .string()
       .min(8, { message: 'Password too short!' })
       .max(20, { message: 'Max 20 characters allowed!' }),
+    countryCode: z.string().min(1, 'Select a code'),
     cell: z
       .string()
-      .regex(/^\d+$/, 'Should contain only numbers')
-      .min(7, { message: 'Invalid phone number' })
-      .max(14, { message: 'Invalid phone number' }),
+      .regex(/^\d+$/, 'Should contain only digits')
+      .min(7, 'Invalid phone number')
+      .max(14, 'Invalid phone number'),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,7 +57,8 @@ export default function SignUp() {
       fullname: '',
       email: '',
       password: '',
-      cell: undefined,
+      countryCode: '',
+      cell: '',
     },
   });
 
@@ -77,7 +79,7 @@ export default function SignUp() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.1, ease: 'linear' }}
-        className="bg-white dark:bg-gray-800 rounded-lg flex flex-col justify-center items-center"
+        className="bg-gray-50 dark:bg-gray-800 rounded-lg flex flex-col justify-center items-center"
       >
         <h1
           className="h-auto mx-4 pt-6 font-semibold text-5xl text-center text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
@@ -147,36 +149,60 @@ export default function SignUp() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="cell"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="mb-1">
-                    <FormLabel>Cell No</FormLabel>
-                  </div>
-                  <FormControl>
-                    <div className="flex justify-start items-center gap-x-2">
-                      <Select>
-                        <SelectTrigger className="w-[45%]">
-                          <SelectValue placeholder="Code" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700">
-                          {countryLoading && (
-                            <div className="px-4 py-2 text-sm">Loading...</div>
-                          )}
+            <div className="flex items-center w-full gap-2">
+              <div className="basis-1/3">
+                <FormField
+                  control={form.control}
+                  name="countryCode"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Code</FormLabel>
+                      <FormControl>
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={(v) => {
+                            const dial = v.split('-')[1];
+                            field.onChange(dial);
+                          }}
+                          value={
+                            field.value
+                              ? `${
+                                  countryCodes?.find(
+                                    (x) => x.dial_code === field.value
+                                  )?.code
+                                }-${field.value}`
+                              : undefined
+                          }
+                        >
+                          <SelectTrigger
+                            className="m-0"
+                            disabled={countryLoading}
+                          >
+                            {countryLoading ? (
+                              'Loading...'
+                            ) : (
+                              <SelectValue placeholder="Code" />
+                            )}
+                          </SelectTrigger>
+                          <SelectContent className="bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 w-[50%] h-48">
+                            {countryLoading && (
+                              <div className="px-3 py-2 text-sm">
+                                Loading...
+                              </div>
+                            )}
+                            {countryError && (
+                              <div className="px-3 py-2 text-sm text-red-600">
+                                Failed to load codes
+                              </div>
+                            )}
 
-                          {countryError && (
-                            <div className="px-4 py-2 text-sm text-red-600">
-                              Failed to load codes
-                            </div>
-                          )}
-
-                          {countryCodes?.map((code: any) => (
-                            <SelectItem
-                              key={code.code}
-                              value={`${code.code}-${code.dial_code}`}
-                              className="
+                            {!countryLoading &&
+                              !countryError &&
+                              countryCodes?.map((c) => (
+                                <SelectItem
+                                  key={c.code}
+                                  value={`${c.code}-${c.dial_code}`}
+                                  className="
                                 cursor-pointer 
                                 px-3 py-2 
                                 text-sm 
@@ -189,21 +215,40 @@ export default function SignUp() {
                                 data-[highlighted]:text-black 
                                 dark:data-[highlighted]:text-white
                               "
-                            >
-                              {code.name} ({code.dial_code})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Input placeholder="(123)456-789" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                                >
+                                  {c.name} ({c.dial_code})
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="basis-2/3">
+                <FormField
+                  control={form.control}
+                  name="cell"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Cell</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="(123)456-789"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
             <Button
-              className="bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02]"
+              className="bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02] text-black"
               type="submit"
             >
               Sign Up

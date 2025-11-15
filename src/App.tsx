@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router';
 import { ThemeProvider } from './components/custom/theme-provider';
+import ForgotPassword from './components/Pages/ForgotPassword';
 import Home from './components/Pages/Home';
 import Mfa from './components/Pages/Mfa';
 import SecQue from './components/Pages/SecQue';
@@ -20,14 +21,9 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-
-            {/* Add Sign Up flow route */}
-            <Route path="/:username/sign-up/SecQue" element={<SecQue />} />
-            <Route path="/:username/sign-up/2fa" element={<Mfa />} />
-
-            {/* Add Sign Ip flow route */}
-            <Route path="/:username/sign-in/2fa" element={<SignUp />} />
-            <Route path="/:username/sign-in/SecQue" element={<SignUp />} />
+            <Route path="/forgot-pass" element={<ForgotPassword />} />
+            <Route path="/sign-up/SecQue" element={<SecQue />} />
+            <Route path="/sign-up/2fa" element={<Mfa />} />
           </Route>
 
           {/* <Route element={<RequireAuth />}> */}

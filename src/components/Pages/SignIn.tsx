@@ -80,12 +80,14 @@ function SignIn() {
                 <FormItem>
                   <div className="flex items-center justify-between">
                     <FormLabel>Password</FormLabel>
-                    <Button
-                      variant="link"
-                      className="p-0 text-right font-light text-blue-600 dark:text-blue-400"
-                    >
-                      Forgot Password?
-                    </Button>
+                    <Link to="/forgot-pass">
+                      <Button
+                        variant="link"
+                        className="p-0 text-right font-light text-blue-600 dark:text-blue-400"
+                      >
+                        Forgot Password?
+                      </Button>
+                    </Link>
                   </div>
                   <FormControl>
                     <div className="relative flex justify-start items-center gap-3">
