@@ -1,3 +1,4 @@
+import { useLockbaseApi } from '@/api/ApiService';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -11,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import * as motion from 'motion/react-client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { z } from 'zod';
@@ -25,6 +26,13 @@ import {
 
 export default function SignUp() {
   const [viewPass, setViewPass] = useState(false);
+  const api = useLockbaseApi();
+  const {
+    request: fetchCountryCodes,
+    isLoading: countryLoading,
+    data: countryCodes,
+    error: countryError,
+  } = api.getCountryCodes;
 
   const formSchema = z.object({
     fullname: z.string({
@@ -37,8 +45,8 @@ export default function SignUp() {
       .min(8, { message: 'Password too short!' })
       .max(20, { message: 'Max 20 characters allowed!' }),
     cell: z
-      .number()
-      .positive()
+      .string()
+      .regex(/^\d+$/, 'Should contain only numbers')
       .min(7, { message: 'Invalid phone number' })
       .max(14, { message: 'Invalid phone number' }),
   });
@@ -51,9 +59,15 @@ export default function SignUp() {
       cell: undefined,
     },
   });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+
+  useEffect(() => {
+    fetchCountryCodes();
+  }, []);
+
   return (
     <div
       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
@@ -144,13 +158,41 @@ export default function SignUp() {
                   <FormControl>
                     <div className="flex justify-start items-center gap-x-2">
                       <Select>
-                        <SelectTrigger className="w-[30%]">
+                        <SelectTrigger className="w-[45%]">
                           <SelectValue placeholder="Code" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="CA/US">+1</SelectItem>
-                          <SelectItem value="IN">+91</SelectItem>
-                          <SelectItem value="CN">+86</SelectItem>
+                        <SelectContent className="bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700">
+                          {countryLoading && (
+                            <div className="px-4 py-2 text-sm">Loading...</div>
+                          )}
+
+                          {countryError && (
+                            <div className="px-4 py-2 text-sm text-red-600">
+                              Failed to load codes
+                            </div>
+                          )}
+
+                          {countryCodes?.map((code: any) => (
+                            <SelectItem
+                              key={code.code}
+                              value={`${code.code}-${code.dial_code}`}
+                              className="
+                                cursor-pointer 
+                                px-3 py-2 
+                                text-sm 
+                                hover:bg-neutral-100 
+                                dark:hover:bg-neutral-800 
+                                data-[state=checked]:bg-neutral-200 
+                                dark:data-[state=checked]:bg-neutral-700 
+                                data-[highlighted]:bg-neutral-200 
+                                dark:data-[highlighted]:bg-neutral-800
+                                data-[highlighted]:text-black 
+                                dark:data-[highlighted]:text-white
+                              "
+                            >
+                              {code.name} ({code.dial_code})
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <Input placeholder="(123)456-789" {...field} />
