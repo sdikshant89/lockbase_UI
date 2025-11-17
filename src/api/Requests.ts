@@ -1,4 +1,4 @@
-import { countryCodes } from './Types';
+import { countryCodes, securityQuestions } from './Types';
 import { useAxios } from './UseAxios';
 
 export const useCountryCodes = () => {
@@ -9,8 +9,21 @@ export const useCountryCodes = () => {
     useBaseURL: false,
   });
 
-  // Just for code consistency, and if needed can add body in genRequest
+  // Just for code consistency, and if needed can add body in genRequest (taking from useCountryCodes function's parameter)
   const getCountryCode = () => genRequest();
 
   return { getCountryCode, isLoading, data, error };
+};
+
+export const useSecurityQuestions = () => {
+  const { genRequest, isLoading, data, error } = useAxios<securityQuestions>({
+    url: '/SecQue/get_all_questions',
+    method: 'GET',
+    authToken: false,
+    useBaseURL: true,
+  });
+
+  const getSecurityQuestions = () => genRequest();
+
+  return { getSecurityQuestions, isLoading, data, error };
 };

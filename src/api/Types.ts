@@ -1,8 +1,18 @@
 // for useCountryCodes
-export type countryObject = {
+type countryObject = {
   name: string;
   dial_code: string;
   code: string;
 };
 
-export type countryCodes = countryObject[];
+type countryCodes = countryObject[];
+
+// for securityQuestions
+type securityQuestion = {
+  id: number;
+  question: string;
+};
+
+type securityQuestions = securityQuestion[];
+
+export type { countryCodes, securityQuestions };

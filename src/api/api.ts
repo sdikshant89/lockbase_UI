@@ -5,7 +5,8 @@ import axios, {
 } from 'axios';
 
 export const api = axios.create({
-  baseURL: import.meta.env.LOCKBASE_API_BASE_URL || 'https://api.example.com',
+  baseURL:
+    import.meta.env.LOCKBASE_API_BASE_URL || 'http://localhost:8080/lockbase',
 });
 
 api.interceptors.request.use(

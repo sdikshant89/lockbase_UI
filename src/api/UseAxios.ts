@@ -30,6 +30,8 @@ export function useAxios<T>({
         data: body,
         authToken,
       });
+      console.log('response');
+      console.log(res);
 
       setData(res.data);
     } catch (err: any) {

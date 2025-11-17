@@ -9,12 +9,15 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { saveBasicInfo } from '@/store/slices/signUpSlice';
+import { RootState } from '@/store/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import * as motion from 'motion/react-client';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router';
 import { z } from 'zod';
 import {
   Select,
@@ -26,16 +29,15 @@ import {
 
 export default function SignUp() {
   const [viewPass, setViewPass] = useState(false);
-  const api = useLockbaseApi();
-  const {
-    request: fetchCountryCodes,
-    isLoading: countryLoading,
-    data: countryCodes,
-    error: countryError,
-  } = api.getCountryCodes;
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const signUpState = useSelector((state: RootState) => state.signUp);
+
+  const { countryCodesAPI } = useLockbaseApi();
 
   const formSchema = z.object({
-    fullname: z.string({
+    username: z.string({
       required_error: 'Name is required',
       invalid_type_error: 'Name must be a string',
     }),
@@ -45,7 +47,7 @@ export default function SignUp() {
       .min(8, { message: 'Password too short!' })
       .max(20, { message: 'Max 20 characters allowed!' }),
     countryCode: z.string().min(1, 'Select a code'),
-    cell: z
+    cellNumber: z
       .string()
       .regex(/^\d+$/, 'Should contain only digits')
       .min(7, 'Invalid phone number')
@@ -54,21 +56,46 @@ export default function SignUp() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullname: '',
+      username: '',
       email: '',
       password: '',
       countryCode: '',
-      cell: '',
+      cellNumber: '',
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    dispatch(
+      saveBasicInfo({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        countryCode: values.countryCode,
+        cellNumber: values.cellNumber,
+      })
+    );
+
+    navigate(`/sign-up/SecQue`);
   }
 
   useEffect(() => {
-    fetchCountryCodes();
+    countryCodesAPI.getCountryCode();
+
+    if (signUpState && signUpState.username) {
+      form.reset({
+        username: signUpState.username,
+        email: signUpState.email,
+        password: signUpState.password,
+        cellNumber: signUpState.cellNumber,
+      });
+    }
   }, []);
+
+  useEffect(() => {
+    if (countryCodesAPI.data && signUpState.countryCode) {
+      form.setValue('countryCode', signUpState.countryCode);
+    }
+  }, [countryCodesAPI.data]);
 
   return (
     <div
@@ -94,11 +121,11 @@ export default function SignUp() {
           >
             <FormField
               control={form.control}
-              name="fullname"
+              name="username"
               render={({ field }) => (
                 <FormItem>
                   <div className="mb-1">
-                    <FormLabel>Full Name</FormLabel>
+                    <FormLabel>Username</FormLabel>
                   </div>
                   <FormControl>
                     <Input placeholder="Rick C-137" {...field} />
@@ -107,6 +134,104 @@ export default function SignUp() {
                 </FormItem>
               )}
             />
+            <div className="flex items-center w-full gap-2">
+              <div className="basis-1/3">
+                <FormField
+                  control={form.control}
+                  name="countryCode"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Code</FormLabel>
+                      <FormControl>
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={(v) => {
+                            const dial = v.split('-')[1];
+                            field.onChange(dial);
+                          }}
+                          value={
+                            field.value
+                              ? `${
+                                  countryCodesAPI.data?.find(
+                                    (x) => x.dial_code === field.value
+                                  )?.code
+                                }-${field.value}`
+                              : undefined
+                          }
+                        >
+                          <SelectTrigger
+                            className="m-0"
+                            disabled={countryCodesAPI.isLoading}
+                          >
+                            {countryCodesAPI.isLoading ? (
+                              'Loading...'
+                            ) : (
+                              <SelectValue placeholder="Code" />
+                            )}
+                          </SelectTrigger>
+                          <SelectContent className="bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 w-[50%] h-48">
+                            {countryCodesAPI.isLoading && (
+                              <div className="px-3 py-2 text-sm">
+                                Loading...
+                              </div>
+                            )}
+                            {countryCodesAPI.error && (
+                              <div className="px-3 py-2 text-sm text-red-600">
+                                Failed to load codes
+                              </div>
+                            )}
+
+                            {!countryCodesAPI.isLoading &&
+                              !countryCodesAPI.error &&
+                              countryCodesAPI.data?.map((c) => (
+                                <SelectItem
+                                  key={c.code}
+                                  value={`${c.code}-${c.dial_code}`}
+                                  className="
+                                cursor-pointer 
+                                px-3 py-2 
+                                text-sm 
+                                hover:bg-neutral-100 
+                                dark:hover:bg-neutral-800 
+                                data-[state=checked]:bg-neutral-200 
+                                dark:data-[state=checked]:bg-neutral-700 
+                                data-[highlighted]:bg-neutral-200 
+                                dark:data-[highlighted]:bg-neutral-800
+                                data-[highlighted]:text-black 
+                                dark:data-[highlighted]:text-white
+                              "
+                                >
+                                  {c.name} ({c.dial_code})
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="basis-2/3">
+                <FormField
+                  control={form.control}
+                  name="cellNumber"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Cell</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="(123)456-789"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
             <FormField
               control={form.control}
               name="email"
@@ -149,106 +274,8 @@ export default function SignUp() {
                 </FormItem>
               )}
             />
-            <div className="flex items-center w-full gap-2">
-              <div className="basis-1/3">
-                <FormField
-                  control={form.control}
-                  name="countryCode"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Code</FormLabel>
-                      <FormControl>
-                        <Select
-                          defaultValue={field.value}
-                          onValueChange={(v) => {
-                            const dial = v.split('-')[1];
-                            field.onChange(dial);
-                          }}
-                          value={
-                            field.value
-                              ? `${
-                                  countryCodes?.find(
-                                    (x) => x.dial_code === field.value
-                                  )?.code
-                                }-${field.value}`
-                              : undefined
-                          }
-                        >
-                          <SelectTrigger
-                            className="m-0"
-                            disabled={countryLoading}
-                          >
-                            {countryLoading ? (
-                              'Loading...'
-                            ) : (
-                              <SelectValue placeholder="Code" />
-                            )}
-                          </SelectTrigger>
-                          <SelectContent className="bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 w-[50%] h-48">
-                            {countryLoading && (
-                              <div className="px-3 py-2 text-sm">
-                                Loading...
-                              </div>
-                            )}
-                            {countryError && (
-                              <div className="px-3 py-2 text-sm text-red-600">
-                                Failed to load codes
-                              </div>
-                            )}
-
-                            {!countryLoading &&
-                              !countryError &&
-                              countryCodes?.map((c) => (
-                                <SelectItem
-                                  key={c.code}
-                                  value={`${c.code}-${c.dial_code}`}
-                                  className="
-                                cursor-pointer 
-                                px-3 py-2 
-                                text-sm 
-                                hover:bg-neutral-100 
-                                dark:hover:bg-neutral-800 
-                                data-[state=checked]:bg-neutral-200 
-                                dark:data-[state=checked]:bg-neutral-700 
-                                data-[highlighted]:bg-neutral-200 
-                                dark:data-[highlighted]:bg-neutral-800
-                                data-[highlighted]:text-black 
-                                dark:data-[highlighted]:text-white
-                              "
-                                >
-                                  {c.name} ({c.dial_code})
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="basis-2/3">
-                <FormField
-                  control={form.control}
-                  name="cell"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Cell</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="(123)456-789"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
             <Button
-              className="bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02] text-black"
+              className="basis-2/3 bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02] text-black "
               type="submit"
             >
               Sign Up
