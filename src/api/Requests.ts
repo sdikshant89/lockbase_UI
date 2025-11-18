@@ -1,4 +1,5 @@
-import { countryCodes, securityQuestions } from './Types';
+import { RootState } from '@/store/store';
+import { countryCodes, securityQuestions, signUpResponse } from './Types';
 import { useAxios } from './UseAxios';
 
 export const useCountryCodes = () => {
@@ -9,7 +10,6 @@ export const useCountryCodes = () => {
     useBaseURL: false,
   });
 
-  // Just for code consistency, and if needed can add body in genRequest (taking from useCountryCodes function's parameter)
   const getCountryCode = () => genRequest();
 
   return { getCountryCode, isLoading, data, error };
@@ -26,4 +26,18 @@ export const useSecurityQuestions = () => {
   const getSecurityQuestions = () => genRequest();
 
   return { getSecurityQuestions, isLoading, data, error };
+};
+
+export const useSignUp = () => {
+  const { genRequest, isLoading, data, error } = useAxios<signUpResponse>({
+    url: '/auth/register_user',
+    method: 'POST',
+    authToken: false,
+    useBaseURL: true,
+  });
+
+  const registerUser = (requestObject: RootState['signUp']) =>
+    genRequest(requestObject);
+
+  return { registerUser, isLoading, data, error };
 };

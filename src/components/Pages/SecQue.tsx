@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { Input } from '../ui/input';
 import {
@@ -28,7 +29,7 @@ import {
 } from '../ui/select';
 
 function SecQue() {
-  const { securityQuestionsAPI } = useLockbaseApi();
+  const { securityQuestionsAPI, signUpAPI } = useLockbaseApi();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signUpState = useSelector((state: RootState) => state.signUp);
@@ -63,20 +64,26 @@ function SecQue() {
   const selectedQuestion1 = form.watch('question1');
   const selectedQuestion2 = form.watch('question2');
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    dispatch(
-      setSecurityAnswers([
-        {
-          questionId: Number(values.question1),
-          answer: values.answer1,
-        },
-        {
-          questionId: Number(values.question2),
-          answer: values.answer2,
-        },
-      ])
-    );
-    navigate(`/sign-up/2fa`);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const securityAnswers = [
+      { questionId: Number(values.question1), answer: values.answer1 },
+      { questionId: Number(values.question2), answer: values.answer2 },
+    ];
+
+    dispatch(setSecurityAnswers(securityAnswers));
+
+    const res = await signUpAPI.registerUser({
+      ...signUpState,
+      securityQueAns: securityAnswers,
+    });
+    if (!res || res.success === false) {
+      toast.error('Registration failed', {
+        description: res?.errorMessage || 'Something went wrong',
+      });
+      return;
+    }
+    toast.success('OTP Sent!', { description: `Expires at: ${res.otpExpiry}` });
+    navigate('/sign-up/2fa');
   }
 
   useEffect(() => {

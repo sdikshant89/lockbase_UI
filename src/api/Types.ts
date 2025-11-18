@@ -15,4 +15,13 @@ type securityQuestion = {
 
 type securityQuestions = securityQuestion[];
 
-export type { countryCodes, securityQuestions };
+type signUpResponse = {
+  email: string;
+  status: string;
+  message: string;
+  errorMessage: string | null;
+  success: boolean;
+  otpExpiry: string;
+};
+
+export type { countryCodes, securityQuestions, signUpResponse };
