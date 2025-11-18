@@ -1,5 +1,5 @@
-import { signUpState } from '@/types/signUpTypes';
-import { createSlice } from '@reduxjs/toolkit';
+import { SecurityAnswer, signUpState } from '@/types/signUpTypes';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: signUpState = {
   username: '',
@@ -23,26 +23,14 @@ const signUpSlice = createSlice({
       state.countryCode = countryCode;
       state.cellNumber = cellNumber;
     },
-    addSecurityAnswer: (state, action) => {
-      state.securityQueAns.push(action.payload);
-    },
-    updateSecurityAnswer: (state, action) => {
-      const index = state.securityQueAns.findIndex(
-        (ans) => ans.questionId === action.payload.questionId
-      );
-      if (index !== -1) {
-        state.securityQueAns[index] = action.payload;
-      }
+    setSecurityAnswers: (state, action: PayloadAction<SecurityAnswer[]>) => {
+      state.securityQueAns = action.payload;
     },
     resetSignUp: () => initialState,
   },
 });
 
-export const {
-  saveBasicInfo,
-  addSecurityAnswer,
-  updateSecurityAnswer,
-  resetSignUp,
-} = signUpSlice.actions;
+export const { saveBasicInfo, setSecurityAnswers, resetSignUp } =
+  signUpSlice.actions;
 
 export default signUpSlice.reducer;

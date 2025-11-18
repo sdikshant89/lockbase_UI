@@ -46,7 +46,7 @@ function Mfa() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.1, ease: 'linear' }}
-        className="bg-white rounded-lg flex flex-col justify-center items-center"
+        className="bg-white dark:bg-gray-800 rounded-lg flex flex-col justify-center items-center"
       >
         <h1
           className="h-auto mx-4 pt-6 font-semibold text-5xl text-center text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
@@ -92,13 +92,24 @@ function Mfa() {
               )}
             />
             <Button
-              className="ml-2 bg-yellow-200 hover:font-bold w-24"
+              className="ml-2 mt-4 bg-yellow-200 dark:bg-amber-300 hover:font-bold transition-all hover:scale-[1.02] text-black w-24"
               type="submit"
             >
-              Submit
+              Verify
             </Button>
           </form>
         </Form>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.5, ease: 'linear' }}
+        className="bg-white dark:bg-gray-800  h-16 mt-5 rounded-lg flex justify-center items-center"
+      >
+        <h1>Didn't receive email OTP?</h1>
+        <Button variant="link" className="text-blue-500 text-md">
+          Resend OTP
+        </Button>
       </motion.div>
     </div>
   );

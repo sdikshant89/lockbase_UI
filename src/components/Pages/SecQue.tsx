@@ -3,16 +3,20 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { setSecurityAnswers } from '@/store/slices/signUpSlice';
+import { RootState } from '@/store/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as motion from 'motion/react-client';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router';
 import { z } from 'zod';
 import { Input } from '../ui/input';
 import {
@@ -25,6 +29,9 @@ import {
 
 function SecQue() {
   const { securityQuestionsAPI } = useLockbaseApi();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const signUpState = useSelector((state: RootState) => state.signUp);
 
   const formSchema = z.object({
     question1: z.string().min(1, 'Select a question'),
@@ -57,12 +64,35 @@ function SecQue() {
   const selectedQuestion2 = form.watch('question2');
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    dispatch(
+      setSecurityAnswers([
+        {
+          questionId: Number(values.question1),
+          answer: values.answer1,
+        },
+        {
+          questionId: Number(values.question2),
+          answer: values.answer2,
+        },
+      ])
+    );
+    navigate(`/sign-up/2fa`);
   }
 
   useEffect(() => {
     securityQuestionsAPI.getSecurityQuestions();
   }, []);
+
+  useEffect(() => {
+    if (signUpState.securityQueAns.length === 2) {
+      form.reset({
+        question1: String(signUpState.securityQueAns[0].questionId),
+        answer1: signUpState.securityQueAns[0].answer,
+        question2: String(signUpState.securityQueAns[1].questionId),
+        answer2: signUpState.securityQueAns[1].answer,
+      });
+    }
+  }, [signUpState]);
 
   return (
     <div
@@ -237,15 +267,22 @@ function SecQue() {
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormDescription>
+                          Set your security answers carefully
+                          <br />
+                          <span className="font-light text-red-400">
+                            They’re the <strong>only</strong> way to recover
+                            your vault if you forget your account password.
+                          </span>
+                        </FormDescription>
                       </FormItem>
                     )}
                   />
                   <Button
-                    className="bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02]"
+                    className="bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02] text-black"
                     type="submit"
                   >
-                    Sign Up
+                    Get OTP
                   </Button>
                 </form>
               </Form>
