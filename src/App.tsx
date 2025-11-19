@@ -5,6 +5,7 @@ import { ThemeProvider } from './components/custom/theme-provider';
 import ForgotPassword from './components/Pages/ForgotPassword';
 import Home from './components/Pages/Home';
 import Mfa from './components/Pages/Mfa';
+import RequireSignUpFlow from './components/Pages/RequireSignUpFlow';
 import SecQue from './components/Pages/SecQue';
 import SignIn from './components/Pages/SignIn';
 import SignUp from './components/Pages/SignUp';
@@ -24,8 +25,22 @@ function App() {
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forgot-pass" element={<ForgotPassword />} />
-              <Route path="/sign-up/SecQue" element={<SecQue />} />
-              <Route path="/sign-up/2fa" element={<Mfa />} />
+              <Route
+                path="/sign-up/SecQue"
+                element={
+                  <RequireSignUpFlow>
+                    <SecQue />
+                  </RequireSignUpFlow>
+                }
+              />
+              <Route
+                path="/sign-up/2fa"
+                element={
+                  <RequireSignUpFlow>
+                    <Mfa />
+                  </RequireSignUpFlow>
+                }
+              />
             </Route>
 
             {/* <Route element={<RequireAuth />}> */}

@@ -12,6 +12,7 @@ import {
 import { setSecurityAnswers } from '@/store/slices/signUpSlice';
 import { RootState } from '@/store/store';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LoaderCircle } from 'lucide-react';
 import * as motion from 'motion/react-client';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -77,12 +78,13 @@ function SecQue() {
       securityQueAns: securityAnswers,
     });
     if (!res || res.success === false) {
-      toast.error('Registration failed', {
-        description: res?.errorMessage || 'Something went wrong',
+      toast.warning('Registration failed', {
+        description:
+          res?.errorMessage || 'Something went wrong, try refreshing page',
       });
       return;
     }
-    toast.success('OTP Sent!', { description: `Expires at: ${res.otpExpiry}` });
+    toast.success('OTP Sent!', { description: 'Check email for OTP' });
     navigate('/sign-up/2fa');
   }
 
@@ -289,7 +291,16 @@ function SecQue() {
                     className="bg-yellow-200 dark:bg-amber-300 hover:font-bold mt-2 transition-all hover:scale-[1.02] text-black"
                     type="submit"
                   >
-                    Get OTP
+                    {signUpAPI.isLoading && (
+                      <LoaderCircle className="animate-spin h-5 w-5" />
+                    )}
+
+                    {!signUpAPI.isLoading &&
+                      !signUpAPI.data &&
+                      !signUpAPI.error &&
+                      'Get OTP'}
+
+                    {signUpAPI.error && 'Try Again'}
                   </Button>
                 </form>
               </Form>
