@@ -1,5 +1,10 @@
 import { RootState } from '@/store/store';
-import { countryCodes, securityQuestions, signUpResponse } from './Types';
+import {
+  countryCodes,
+  securityQuestions,
+  signUpResponse,
+  verifyOtpRequest,
+} from './Types';
 import { useAxios } from './UseAxios';
 
 export const useCountryCodes = () => {
@@ -40,4 +45,18 @@ export const useSignUp = () => {
     genRequest(requestObject);
 
   return { registerUser, isLoading, data, error };
+};
+
+export const useVerifyOtp = () => {
+  const { genRequest, isLoading, data, error } = useAxios<signUpResponse>({
+    url: '/auth/verify_otp',
+    method: 'POST',
+    authToken: false,
+    useBaseURL: true,
+  });
+
+  const verifyOtp = (requestObject: verifyOtpRequest) =>
+    genRequest(requestObject);
+
+  return { verifyOtp, isLoading, data, error };
 };

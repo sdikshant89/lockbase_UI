@@ -1,3 +1,4 @@
+import { useLockbaseApi } from '@/api/ApiService';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -14,14 +15,18 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/imputOtp';
+import { RootState } from '@/store/store';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LoaderCircle } from 'lucide-react';
 import * as motion from 'motion/react-client';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router';
+import { useSelector } from 'react-redux';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 function Mfa() {
-  const { username } = useParams();
+  const { verifyOtpAPI } = useLockbaseApi();
+  const signUpState = useSelector((state: RootState) => state.signUp);
   const FormSchema = z.object({
     otp: z.string().min(6, {
       message: 'Your one-time password must be 6 characters.',
@@ -33,9 +38,19 @@ function Mfa() {
       otp: '',
     },
   });
-  function onSubmit(values: z.infer<typeof FormSchema>) {
-    console.log(values);
-    console.log(username);
+  async function onSubmit(values: z.infer<typeof FormSchema>) {
+    const res = await verifyOtpAPI.verifyOtp({
+      email: signUpState.email,
+      otp: values.otp,
+    });
+    if (!res || res.success === false) {
+      toast.warning('OTP could not be verified', {
+        description:
+          res?.errorMessage || 'Something went wrong, try refreshing page',
+      });
+      return;
+    }
+    toast.success('Success!', { description: 'User Registration Successful' });
   }
   return (
     <div
@@ -95,7 +110,16 @@ function Mfa() {
               className="ml-2 mt-4 bg-yellow-200 dark:bg-amber-300 hover:font-bold transition-all hover:scale-[1.02] text-black w-24"
               type="submit"
             >
-              Verify
+              {verifyOtpAPI.isLoading && (
+                <LoaderCircle className="animate-spin h-5 w-5" />
+              )}
+
+              {!verifyOtpAPI.isLoading &&
+                !verifyOtpAPI.data &&
+                !verifyOtpAPI.error &&
+                'Verify'}
+
+              {verifyOtpAPI.error && 'Try Again'}
             </Button>
           </form>
         </Form>

@@ -18,7 +18,9 @@ export function useAxios<T>({
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const genRequest = async (body?: any): Promise<T | null> => {
+  const genRequest = async (
+    body?: any
+  ): Promise<T | { success: false; errorMessage: string }> => {
     setIsLoading(true);
     setError(null);
 
@@ -34,8 +36,15 @@ export function useAxios<T>({
       setData(res.data);
       return res.data;
     } catch (err: any) {
-      setError(err.response?.data || err.message);
-      return null;
+      const backendError =
+        err.response?.data?.errorMessage || err.response?.data || err.message;
+
+      setError(backendError);
+
+      return {
+        success: false,
+        errorMessage: backendError,
+      };
     } finally {
       setIsLoading(false);
     }

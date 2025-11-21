@@ -24,4 +24,14 @@ type signUpResponse = {
   otpExpiry: string;
 };
 
-export type { countryCodes, securityQuestions, signUpResponse };
+type verifyOtpRequest = {
+  email: string;
+  otp: string;
+};
+
+export type {
+  countryCodes,
+  securityQuestions,
+  signUpResponse,
+  verifyOtpRequest,
+};
