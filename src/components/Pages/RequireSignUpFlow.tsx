@@ -20,6 +20,8 @@ export default function RequireSignUpFlow({
 
   const securityQuestionsComplete = signUp.securityQueAns.length === 2;
 
+  const isVerified = signUp.isVerified;
+
   const currentPath = location.pathname;
 
   if (currentPath.includes('/sign-up/SecQue') && !basicInfoComplete) {
@@ -34,6 +36,13 @@ export default function RequireSignUpFlow({
       description: 'Please answer your security questions before continuing.',
     });
     return <Navigate to="/sign-up/SecQue" replace />;
+  }
+
+  if (currentPath.includes('/signup-success') && !isVerified) {
+    toast.warning('Redirecting to get OTP', {
+      description: 'Please verify OTP before continuing.',
+    });
+    return <Navigate to="/sign-up/2fa" replace />;
   }
 
   return children;

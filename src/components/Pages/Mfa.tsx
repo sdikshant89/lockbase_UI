@@ -15,17 +15,19 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/imputOtp';
+import { setVerified } from '@/store/slices/signUpSlice';
 import { RootState } from '@/store/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
 import * as motion from 'motion/react-client';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 function Mfa() {
   const { verifyOtpAPI } = useLockbaseApi();
+  const dispatch = useDispatch();
   const signUpState = useSelector((state: RootState) => state.signUp);
   const FormSchema = z.object({
     otp: z.string().min(6, {
@@ -38,19 +40,30 @@ function Mfa() {
       otp: '',
     },
   });
+
+  // Rsend OTP and final landing page (reset store)
   async function onSubmit(values: z.infer<typeof FormSchema>) {
-    const res = await verifyOtpAPI.verifyOtp({
-      email: signUpState.email,
-      otp: values.otp,
-    });
-    if (!res || res.success === false) {
-      toast.warning('OTP could not be verified', {
-        description:
-          res?.errorMessage || 'Something went wrong, try refreshing page',
+    try {
+      const res = await verifyOtpAPI.verifyOtp({
+        email: signUpState.email,
+        otp: values.otp,
       });
-      return;
+      if (!res?.success) {
+        toast.warning('OTP could not be verified', {
+          description:
+            res?.errorMessage || 'Something went wrong, try refreshing page',
+        });
+        return;
+      }
+      toast.success('Success!', {
+        description: 'User Registration Successful',
+      });
+      dispatch(setVerified(true));
+    } catch (err) {
+      toast.error('Network error', {
+        description: 'Please check your connection and try again',
+      });
     }
-    toast.success('Success!', { description: 'User Registration Successful' });
   }
   return (
     <div

@@ -8,6 +8,7 @@ const initialState: signUpState = {
   cellNumber: '',
   countryCode: '',
   securityQueAns: [],
+  isVerified: false,
 };
 
 const signUpSlice = createSlice({
@@ -26,11 +27,14 @@ const signUpSlice = createSlice({
     setSecurityAnswers: (state, action: PayloadAction<SecurityAnswer[]>) => {
       state.securityQueAns = action.payload;
     },
+    setVerified: (state, action) => {
+      state.isVerified = action.payload;
+    },
     resetSignUp: () => initialState,
   },
 });
 
-export const { saveBasicInfo, setSecurityAnswers, resetSignUp } =
+export const { saveBasicInfo, setSecurityAnswers, resetSignUp, setVerified } =
   signUpSlice.actions;
 
 export default signUpSlice.reducer;

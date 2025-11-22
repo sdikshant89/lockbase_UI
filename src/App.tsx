@@ -9,6 +9,7 @@ import RequireSignUpFlow from './components/Pages/RequireSignUpFlow';
 import SecQue from './components/Pages/SecQue';
 import SignIn from './components/Pages/SignIn';
 import SignUp from './components/Pages/SignUp';
+import SignUpSuccess from './components/Pages/SignUpSuccess';
 import WelcomePage from './components/Pages/Welcome';
 import DashLayout from './Layouts/DashLayout';
 import HomeLayout from './Layouts/HomeLayout';
@@ -25,6 +26,14 @@ function App() {
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forgot-pass" element={<ForgotPassword />} />
+              <Route
+                path="/signup-success"
+                element={
+                  <RequireSignUpFlow>
+                    <SignUpSuccess />
+                  </RequireSignUpFlow>
+                }
+              />
               <Route
                 path="/sign-up/SecQue"
                 element={

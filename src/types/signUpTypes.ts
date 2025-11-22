@@ -5,6 +5,7 @@ export type signUpState = {
   cellNumber: string;
   countryCode: string;
   securityQueAns: SecurityAnswer[];
+  isVerified: boolean;
 };
 
 export type SecurityAnswer = {
