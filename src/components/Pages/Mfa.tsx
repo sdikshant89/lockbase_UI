@@ -59,7 +59,7 @@ function Mfa() {
         description: 'User Registration Successful',
       });
       dispatch(setVerified(true));
-    } catch (err) {
+    } catch {
       toast.error('Network error', {
         description: 'Please check your connection and try again',
       });
