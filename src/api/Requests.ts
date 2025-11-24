@@ -60,3 +60,17 @@ export const useVerifyOtp = () => {
 
   return { verifyOtp, isLoading, data, error };
 };
+
+export const useResendOtp = () => {
+  const { genRequest, isLoading, data, error } = useAxios<signUpResponse>({
+    url: '/auth/resend_otp',
+    method: 'PATCH',
+    authToken: false,
+    useBaseURL: true,
+  });
+
+  const resendOtp = (requestObject: verifyOtpRequest) =>
+    genRequest(requestObject);
+
+  return { resendOtp, isLoading, data, error };
+};

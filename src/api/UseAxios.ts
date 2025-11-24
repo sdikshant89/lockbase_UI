@@ -3,7 +3,7 @@ import { api } from './api';
 
 type useAxiosProps = {
   url: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   authToken?: boolean;
   useBaseURL?: boolean;
 };

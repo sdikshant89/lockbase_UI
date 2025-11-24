@@ -23,13 +23,15 @@ import * as motion from 'motion/react-client';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 function Mfa() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState<number>(120);
-  const { verifyOtpAPI } = useLockbaseApi();
+  const { verifyOtpAPI, resendOtpAPI } = useLockbaseApi();
   const signUpState = useSelector((state: RootState) => state.signUp);
 
   const FormSchema = z.object({
@@ -61,6 +63,7 @@ function Mfa() {
         description: 'User Registration Successful',
       });
       dispatch(setVerified(true));
+      navigate('/signup-success');
     } catch {
       toast.error('Network error', {
         description: 'Please check your connection and try again',
@@ -75,27 +78,29 @@ function Mfa() {
 
   async function handleResend() {
     try {
-      // const res = await verifyOtpAPI.resendOtp({
-      //   email: signUpState.email,
-      // });
-      // if (!res?.success) {
-      //   toast.warning("Could not resend OTP", {
-      //     description: res?.errorMessage || "Try again",
-      //   });
-      //   return;
-      // }
-      // toast.success("OTP sent!", {
-      //   description: "A new OTP has been emailed to you",
-      // });
-      setTimeLeft(120);
+      const res = await resendOtpAPI.resendOtp({
+        email: signUpState.email,
+        otp: '',
+      });
+      if (!res?.success) {
+        toast.warning('Could not resend OTP', {
+          description: res?.errorMessage || 'Sorry! Try again after some time.',
+        });
+        return;
+      }
+      toast.success('OTP sent!', {
+        description:
+          "A new OTP has been emailed to you. Don't forget to check spam",
+      });
     } catch {
       toast.error('Network error');
+    } finally {
+      setTimeLeft(120);
     }
   }
 
   useEffect(() => {
     if (timeLeft <= 0) return;
-
     const interval = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
     }, 1000);
