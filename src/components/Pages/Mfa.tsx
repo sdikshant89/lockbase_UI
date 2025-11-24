@@ -20,15 +20,18 @@ import { RootState } from '@/store/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoaderCircle } from 'lucide-react';
 import * as motion from 'motion/react-client';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 function Mfa() {
-  const { verifyOtpAPI } = useLockbaseApi();
   const dispatch = useDispatch();
+  const [timeLeft, setTimeLeft] = useState<number>(120);
+  const { verifyOtpAPI } = useLockbaseApi();
   const signUpState = useSelector((state: RootState) => state.signUp);
+
   const FormSchema = z.object({
     otp: z.string().min(6, {
       message: 'Your one-time password must be 6 characters.',
@@ -41,7 +44,6 @@ function Mfa() {
     },
   });
 
-  // Rsend OTP and final landing page (reset store)
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     try {
       const res = await verifyOtpAPI.verifyOtp({
@@ -65,6 +67,42 @@ function Mfa() {
       });
     }
   }
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
+  async function handleResend() {
+    try {
+      // const res = await verifyOtpAPI.resendOtp({
+      //   email: signUpState.email,
+      // });
+      // if (!res?.success) {
+      //   toast.warning("Could not resend OTP", {
+      //     description: res?.errorMessage || "Try again",
+      //   });
+      //   return;
+      // }
+      // toast.success("OTP sent!", {
+      //   description: "A new OTP has been emailed to you",
+      // });
+      setTimeLeft(120);
+    } catch {
+      toast.error('Network error');
+    }
+  }
+
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
   return (
     <div
       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
@@ -141,12 +179,22 @@ function Mfa() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.5, ease: 'linear' }}
-        className="bg-white dark:bg-gray-800  h-16 mt-5 rounded-lg flex justify-center items-center"
+        className="bg-white dark:bg-gray-800  h-16 mt-5 rounded-lg flex justify-center items-center gap-2"
       >
         <h1>Didn't receive email OTP?</h1>
-        <Button variant="link" className="text-blue-500 text-md">
-          Resend OTP
-        </Button>
+        {timeLeft === 0 ? (
+          <Button
+            variant="link"
+            className="text-blue-500 text-md"
+            onClick={handleResend}
+          >
+            Resend OTP
+          </Button>
+        ) : (
+          <p className="text-sm text-gray-500">
+            Resend available in {formatTime(timeLeft)}
+          </p>
+        )}
       </motion.div>
     </div>
   );
