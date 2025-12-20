@@ -14,9 +14,9 @@ import { Link, useLocation } from 'react-router';
 import { NavUser } from './nav-user';
 
 const items = [
-  { title: 'Dashboard', url: 'dash', icon: ChartLine },
+  { title: 'Dashboard', url: 'dashboard', icon: ChartLine },
   { title: 'Generator', url: 'generator', icon: Zap },
-  { title: 'Vault', url: 'vault', icon: Key },
+  { title: 'Passwords', url: 'vault', icon: Key },
 ];
 
 const data = {

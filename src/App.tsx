@@ -55,7 +55,7 @@ function App() {
             {/* <Route element={<RequireAuth />}> */}
             <Route path="/:username" element={<DashLayout />}>
               <Route index element={<WelcomePage />} />
-              <Route path="dash" />
+              <Route path="dashboard" />
               <Route path="generator" />
               <Route path="vault" />
             </Route>
