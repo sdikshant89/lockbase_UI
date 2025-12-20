@@ -14,6 +14,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 
 export function NavUser({
   user,
@@ -28,10 +29,13 @@ export function NavUser({
 
   const trigger = (
     <SidebarMenuButton
-      size="lg"
-      className={
-        'w-full data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex justify-center items-center '
-      }
+      size="xl"
+      className={cn(
+        'w-full hover:dark:bg-zinc-800 hover:bg-blue-100 :text-sidebar-accent-foreground rounded-xl transition-all',
+        state === 'collapsed'
+          ? ''
+          : 'border-b-2 hover:border-b-4 hover:dark:border-b-3 border-transparent hover:border-blue-500'
+      )}
     >
       <Avatar className="h-9 w-9 rounded-lg hover:scale-[1.25] transition-all">
         <AvatarImage src={user.avatar} alt={user.name} />
@@ -62,7 +66,6 @@ export function NavUser({
           <DropdownMenuLabel className="p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
