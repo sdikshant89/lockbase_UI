@@ -1,6 +1,6 @@
-import googleIcon from '@/components/icons/google.png';
-import metaIcon from '@/components/icons/meta.png';
-import xIcon from '@/components/icons/x.png';
+// import googleIcon from '@/components/icons/google.png';
+// import metaIcon from '@/components/icons/meta.png';
+// import xIcon from '@/components/icons/x.png';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,7 +18,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { z } from 'zod';
-import { Separator } from '../ui/separator';
 
 function SignIn() {
   const [viewPass, setViewPass] = useState(false);
@@ -115,7 +114,7 @@ function SignIn() {
             </Button>
           </form>
         </Form>
-        <div className="flex justify-center items-center w-28 my-1">
+        {/* <div className="flex justify-center items-center w-28 my-1">
           <Separator className="bg-gray-500" />{' '}
           <span className="text-gray-400 mx-2 text-nowrap">
             OR continue with
@@ -140,7 +139,7 @@ function SignIn() {
           <Button className="h-full shadow-none">
             <img src={xIcon} alt="X" className="w-full h-full object-contain" />
           </Button>
-        </div>
+        </div> */}
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 40 }}

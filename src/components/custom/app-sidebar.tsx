@@ -16,7 +16,7 @@ import { NavUser } from './nav-user';
 const items = [
   { title: 'Dashboard', url: 'dashboard', icon: ChartLine },
   { title: 'Generator', url: 'generator', icon: Zap },
-  { title: 'Passwords', url: 'vault', icon: Key },
+  { title: 'Passwords', url: 'passwords', icon: Key },
 ];
 
 const data = {

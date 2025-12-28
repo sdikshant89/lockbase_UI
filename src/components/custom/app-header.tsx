@@ -88,13 +88,13 @@ function AppHeader() {
         <Button
           type="button"
           variant="ghost"
-          className="text-white hover:text-white bg-red-400 hover:bg-red-500 dark:bg-red-600 hover:dark:bg-red-800 hover:scale-105 transition-all"
+          className="text-black dark:text-white bg-red-400 hover:bg-red-500 dark:bg-red-600 hover:dark:bg-red-800 hover:scale-105 transition-all"
         >
           <LogOut />
           Logout
         </Button>
         <Button
-          className="p-0 transition-all hover:scale-110 shadow-none"
+          className="p-5 transition-all scale-[150%] hover:scale-[140%] font-bold shadow-none"
           onClick={handleClick}
         >
           {generateThemeSwitch(theme)}

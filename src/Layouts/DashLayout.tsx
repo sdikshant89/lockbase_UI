@@ -7,7 +7,7 @@ function DashLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="flex flex-col w-full bg-indigo-100 dark:bg-zinc-400 sm:ml-0 ml-4 mt-4 mr-4 mb-4 border-none rounded-2xl overflow-hidden relative h-[calc(100vh-2rem)]">
+      <div className="flex flex-col w-full dark:bg-gradient-to-br bg-gradient-to-br from-blue-100 to-blue-200 text-gray-900 dark:from-zinc-800 dark:via-gray-800 dark:to-zinc-900 dark:text-white  sm:ml-0 ml-4 mt-4 mr-4 mb-4 border-none rounded-2xl overflow-hidden relative h-[calc(100vh-2rem)]">
         <div className="sticky top-0 z-20">
           <AppHeader />
         </div>
