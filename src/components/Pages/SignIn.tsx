@@ -1,6 +1,3 @@
-// import googleIcon from '@/components/icons/google.png';
-// import metaIcon from '@/components/icons/meta.png';
-// import xIcon from '@/components/icons/x.png';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -32,9 +29,11 @@ function SignIn() {
       password: '',
     },
   });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+
   return (
     <div
       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
