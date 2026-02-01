@@ -1,4 +1,3 @@
-// for useCountryCodes
 type countryObject = {
   name: string;
   dial_code: string;
@@ -7,13 +6,27 @@ type countryObject = {
 
 type countryCodes = countryObject[];
 
-// for securityQuestions
 type securityQuestion = {
   id: number;
   question: string;
 };
 
 type securityQuestions = securityQuestion[];
+
+type loginRequest = {
+  email: string;
+  password: string;
+};
+
+type loginResponse = {
+  accessToken: string;
+  encPrkPass: string;
+  saltPass: string;
+  ivPass: string;
+  userId: number;
+  email: string;
+  username: string;
+};
 
 type signUpResponse = {
   email: string;
@@ -24,6 +37,10 @@ type signUpResponse = {
   otpExpiry: string;
 };
 
+type refreshResponse = {
+  accessToken: string;
+};
+
 type verifyOtpRequest = {
   email: string;
   otp: string;
@@ -31,6 +48,9 @@ type verifyOtpRequest = {
 
 export type {
   countryCodes,
+  loginRequest,
+  loginResponse,
+  refreshResponse,
   securityQuestions,
   signUpResponse,
   verifyOtpRequest,

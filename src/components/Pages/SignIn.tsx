@@ -1,3 +1,4 @@
+import { useLockbaseApi } from '@/api/ApiService';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -8,20 +9,28 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { login } from '@/store/slices/authSlice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import * as motion from 'motion/react-client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 function SignIn() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loginAPI } = useLockbaseApi();
+
   const [viewPass, setViewPass] = useState(false);
   const formSchema = z.object({
     email: z.string().email({ message: 'Invalid email address' }),
     password: z.string().min(8, { message: 'Password too short!' }).max(20),
   });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,8 +39,31 @@ function SignIn() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res: any = await loginAPI.loginUser({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (res?.success === false) {
+      toast.warning("Couldn't sign in", {
+        description: 'Please check your credentials and try again.',
+      });
+      return;
+    }
+
+    dispatch(
+      login({
+        user: {
+          id: res.userId,
+          email: res.email,
+          username: res.username,
+        },
+        token: res.accessToken,
+      }),
+    );
+
+    navigate(`/${res.username}`);
   }
 
   return (

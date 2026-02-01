@@ -12,7 +12,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      // This is called only when the user is authenticated, if not code won't reach here.
       const { user, token } = action.payload;
       state.user = user;
       state.token = token;

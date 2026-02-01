@@ -1,5 +1,8 @@
 import {
   useCountryCodes,
+  useLogin,
+  useLogout,
+  useRefresh,
   useResendOtp,
   useSecurityQuestions,
   useSignUp,
@@ -12,4 +15,8 @@ export const useLockbaseApi = () => ({
   signUpAPI: useSignUp(),
   verifyOtpAPI: useVerifyOtp(),
   resendOtpAPI: useResendOtp(),
+
+  loginAPI: useLogin(),
+  logoutAPI: useLogout(),
+  refreshAPI: useRefresh(),
 });

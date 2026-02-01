@@ -4,14 +4,14 @@ import { api } from './api';
 type useAxiosProps = {
   url: string;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  authToken?: boolean;
+  skipAuth?: boolean;
   useBaseURL?: boolean;
 };
 
 export function useAxios<T>({
   url,
   method = 'GET',
-  authToken = true,
+  skipAuth = false,
   useBaseURL = true,
 }: useAxiosProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ export function useAxios<T>({
   const [error, setError] = useState<string | null>(null);
 
   const genRequest = async (
-    body?: any
+    body?: any,
   ): Promise<T | { success: false; errorMessage: string }> => {
     setIsLoading(true);
     setError(null);
@@ -30,7 +30,7 @@ export function useAxios<T>({
         url,
         method,
         data: body,
-        authToken,
+        skipAuth,
       });
 
       setData(res.data);
