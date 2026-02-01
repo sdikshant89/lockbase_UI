@@ -16,7 +16,7 @@ export const api = axios.create({
 });
 
 async function doRefresh(): Promise<string> {
-  const res = await api.post('/auth/refresh', {}, { authToken: false as any });
+  const res = await api.post('/auth/refresh', {}, { skipAuth: true });
   const newAccessToken = res.data?.accessToken as string;
 
   if (!newAccessToken) throw new Error('Refresh did not return accessToken');
