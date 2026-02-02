@@ -54,7 +54,7 @@ const WelcomePage = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="space-y-16"
+          className="space-y-12"
         >
           <motion.div variants={itemVariants} className="text-center space-y-8">
             <div className="relative inline-block">
@@ -65,7 +65,7 @@ const WelcomePage = () => {
                 className="relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-2xl opacity-20 scale-[1.75]" />
-                <Shield className="relative h-20 w-20 mx-auto text-blue-500 mb-6" />
+                <Shield className="relative h-20 w-20 mx-auto text-blue-500 mb-2" />
               </motion.div>
             </div>
 

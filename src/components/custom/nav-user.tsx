@@ -1,5 +1,6 @@
 import { BadgeCheck, ChevronsUpDown, LogOut, Sparkles } from 'lucide-react';
 
+import { useLockbaseApi } from '@/api/ApiService';
 import {
   CustomDropdown,
   DropdownMenuGroup,
@@ -15,6 +16,9 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
+import { logout } from '@/store/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 export function NavUser({
   user,
@@ -26,6 +30,15 @@ export function NavUser({
   };
 }) {
   const { state, isMobile } = useSidebar();
+  const { logoutAPI } = useLockbaseApi();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onLogout = async () => {
+    await logoutAPI.logoutUser();
+    dispatch(logout());
+    navigate('/sign-in');
+  };
 
   const trigger = (
     <SidebarMenuButton
@@ -34,7 +47,7 @@ export function NavUser({
         'w-full hover:dark:bg-zinc-800 hover:bg-blue-100 :text-sidebar-accent-foreground rounded-xl transition-all',
         state === 'collapsed'
           ? ''
-          : 'border-b-2 hover:border-b-4 hover:dark:border-b-3 border-transparent hover:border-blue-500'
+          : 'border-b-2 hover:border-b-4 hover:dark:border-b-3 border-transparent hover:border-blue-500',
       )}
     >
       <Avatar className="h-9 w-9 rounded-lg hover:scale-[1.25] transition-all">
@@ -60,17 +73,19 @@ export function NavUser({
           trigger={trigger}
           side={isMobile ? 'bottom' : 'right'}
           align="end"
-          sideOffset={4}
+          sideOffset={2}
           className="min-w-56 rounded-lg"
         >
-          <DropdownMenuLabel className="p-0 font-normal">
+          <DropdownMenuLabel className="mt-1.5 p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="ml-1 h-11 w-11 rounded-lg">
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-medium text-lg">
+                  {user.name}
+                </span>
+                <span className="truncate text-sm">{user.email}</span>
               </div>
             </div>
           </DropdownMenuLabel>
@@ -94,8 +109,9 @@ export function NavUser({
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onClick={() => console.log('Logout clicked')}
+            onClick={onLogout}
             variant="destructive"
+            className="m-1.5 text-white bg-red-400 hover:bg-red-500 dark:bg-red-600 hover:dark:bg-red-800"
           >
             <LogOut />
             Log out

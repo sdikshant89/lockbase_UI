@@ -1,6 +1,9 @@
+import { useLockbaseApi } from '@/api/ApiService';
 import { cn } from '@/lib/utils';
+import { logout } from '@/store/slices/authSlice';
 import { LogOut } from 'lucide-react';
-import { Link, useLocation } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,6 +22,9 @@ function AppHeader() {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
   const pathSegments = location.pathname.split('/').filter(Boolean);
+  const { logoutAPI } = useLockbaseApi();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const username = pathSegments[0];
   const restSegments = pathSegments.slice(1);
@@ -32,6 +38,12 @@ function AppHeader() {
       .replace(/-/g, ' ')
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }
+
+  const onLogout = async () => {
+    await logoutAPI.logoutUser();
+    dispatch(logout());
+    navigate('/sign-in');
+  };
 
   return (
     <div className="flex items-center justify-between bg-blue-400 dark:bg-zinc-950 ps-6 pe-2 text-white">
@@ -49,7 +61,7 @@ function AppHeader() {
                   className={cn(
                     restSegments.length === 0
                       ? 'dark:text-white text-black'
-                      : ''
+                      : '',
                   )}
                 >
                   Home
@@ -88,7 +100,8 @@ function AppHeader() {
         <Button
           type="button"
           variant="ghost"
-          className="text-black dark:text-white bg-red-400 hover:bg-red-500 dark:bg-red-600 hover:dark:bg-red-800 hover:scale-105 transition-all"
+          onClick={onLogout}
+          className="text-white bg-red-400 hover:bg-red-500 dark:bg-red-600 hover:dark:bg-red-800 hover:scale-105 transition-all"
         >
           <LogOut />
           Logout
