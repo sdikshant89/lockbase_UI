@@ -50,7 +50,7 @@ export function NavUser({
           : 'border-b-2 hover:border-b-4 hover:dark:border-b-3 border-transparent hover:border-blue-500',
       )}
     >
-      <Avatar className="h-9 w-9 rounded-lg hover:scale-[1.25] transition-all">
+      <Avatar className="h-9 w-9 rounded-lg hover:scale-[1.05] transition-all">
         <AvatarImage src={user.avatar} alt={user.name} />
         <AvatarFallback className="rounded-lg">CN</AvatarFallback>
       </Avatar>
@@ -74,7 +74,7 @@ export function NavUser({
           side={isMobile ? 'bottom' : 'right'}
           align="end"
           sideOffset={2}
-          className="min-w-56 rounded-lg"
+          className="min-w-56 rounded-lg ml-28 md:ml-0"
         >
           <DropdownMenuLabel className="mt-1.5 p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">

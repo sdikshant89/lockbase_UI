@@ -1,5 +1,4 @@
 import { useLockbaseApi } from '@/api/ApiService';
-import { cn } from '@/lib/utils';
 import { logout } from '@/store/slices/authSlice';
 import { LogOut } from 'lucide-react';
 import { useDispatch } from 'react-redux';
@@ -46,7 +45,7 @@ function AppHeader() {
   };
 
   return (
-    <div className="flex items-center justify-between bg-blue-400 dark:bg-zinc-950 ps-6 pe-2 text-white">
+    <div className="flex items-center justify-between bg-violet-400 dark:bg-zinc-950 ps-6 pe-2 text-white">
       <div className="py-5 flex justify-start items-center gap-3  dark:text-zinc-200">
         <div className="hover:dark:bg-zinc-800 hover:bg-blue-500 rounded-md p-1.5 transition-all">
           <SidebarTrigger className="scale-[130%] hover:scale-[140%] transition-all hover:bg-transparent shadow-none text-black dark:text-white" />
@@ -55,17 +54,11 @@ function AppHeader() {
         <Breadcrumb className="font-medium">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link
-                  to={`/${username}`}
-                  className={cn(
-                    restSegments.length === 0
-                      ? 'dark:text-white text-black'
-                      : '',
-                  )}
-                >
-                  Home
-                </Link>
+              <BreadcrumbLink
+                asChild
+                className="dark:text-zinc-400 text-zinc-200 hover:dark:text-white hover:text-white transition-colors"
+              >
+                <Link to={`/${username}`}>Home</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
 
@@ -83,7 +76,9 @@ function AppHeader() {
                   <BreadcrumbSeparator className="mr-2 text-black dark:text-muted-foreground" />
                   <BreadcrumbItem>
                     {isLast ? (
-                      <BreadcrumbPage>{toTitleCase(segment)}</BreadcrumbPage>
+                      <BreadcrumbPage className="text-white">
+                        {toTitleCase(segment)}
+                      </BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild>
                         <Link to={href}>{toTitleCase(segment)}</Link>

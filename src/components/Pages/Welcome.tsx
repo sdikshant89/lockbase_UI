@@ -49,7 +49,7 @@ const WelcomePage = () => {
           : 'bg-gradient-to-br from-blue-100 to-blue-200 text-gray-900'
       }`}
     >
-      <div className="relative z-10 px-8 py-12 max-w-6xl mx-auto">
+      <div className="relative px-8 py-12 max-w-6xl mx-auto">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -138,7 +138,7 @@ const WelcomePage = () => {
                   theme === 'dark'
                     ? 'bg-zinc-800/50 border border-gray-700/50'
                     : 'bg-blue-400/10 border border-gray-200/50'
-                } backdrop-blur-sm hover:shadow-lg transition-all duration-300`}
+                } backdrop-blur-sm hover:shadow-lg transition-all duration-300 `}
               >
                 <stat.icon className="h-8 w-8 mx-auto mb-3 text-blue-500" />
                 <div className="text-2xl font-bold mb-1">{stat.number}</div>

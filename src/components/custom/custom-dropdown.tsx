@@ -164,7 +164,7 @@ export function CustomDropdown({
             side === 'top' && 'slide-in-from-bottom-2',
             side === 'left' && 'slide-in-from-right-2',
             side === 'right' && 'slide-in-from-left-2',
-            className
+            className,
           )}
           style={{
             top: position.top,
@@ -172,8 +172,8 @@ export function CustomDropdown({
               align === 'center' && (side === 'top' || side === 'bottom')
                 ? position.left - (contentRef.current?.offsetWidth || 0) / 2
                 : align === 'end' && (side === 'top' || side === 'bottom')
-                ? position.left - (contentRef.current?.offsetWidth || 0)
-                : position.left,
+                  ? position.left - (contentRef.current?.offsetWidth || 0)
+                  : position.left,
           }}
         >
           {children}
@@ -202,7 +202,7 @@ export function DropdownMenuItem({
         'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         variant === 'destructive' &&
           'text-destructive hover:bg-destructive/10 focus:bg-destructive/10',
-        className
+        className,
       )}
     >
       {children}
