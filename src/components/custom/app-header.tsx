@@ -1,5 +1,6 @@
 import { useLockbaseApi } from '@/api/ApiService';
 import { logout } from '@/store/slices/authSlice';
+import { clearVault } from '@/store/slices/vaultSlice';
 import { LogOut } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router';
@@ -41,6 +42,7 @@ function AppHeader() {
   const onLogout = async () => {
     await logoutAPI.logoutUser();
     dispatch(logout());
+    dispatch(clearVault());
     navigate('/sign-in');
   };
 

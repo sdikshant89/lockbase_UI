@@ -9,14 +9,14 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
-import { ChartLine, Key, Zap } from 'lucide-react';
+import { ChartLine, Key, WandSparkles } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { NavUser } from './nav-user';
 
 const items = [
   { title: 'Dashboard', url: 'dashboard', icon: ChartLine },
-  { title: 'Generator', url: 'generator', icon: Zap },
-  { title: 'Passwords', url: 'passwords', icon: Key },
+  { title: 'Vault', url: 'vault', icon: Key },
+  { title: 'Generator', url: 'generator', icon: WandSparkles },
 ];
 
 const data = {
@@ -33,10 +33,10 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="mb-2">
+      <SidebarHeader className="my-2">
         <Link to={''}>
           <h1
-            className="h-auto py-2 font-semibold text-2xl sm:text-3xl text-center text-wrap text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
+            className="h-auto py-2 font-semibold text-2xl sm:text-[2rem] text-center text-wrap text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-orange-400"
             style={{ fontStretch: 'extra-expanded' }}
           >
             {state === 'collapsed' ? 'LB' : 'Lockbase'}
@@ -56,17 +56,20 @@ export function AppSidebar() {
                     : 'mb-1 mx-3  border-l-2 hover:border-l-4 border-transparent hover:border-blue-500',
                   currentPath.includes(item.url)
                     ? 'dark:bg-zinc-800 bg-blue-200 font-semibold border-l-4 dark:border-blue-500 border-blue-500'
-                    : ''
+                    : '',
+                  state === 'collapsed' && currentPath.includes(item.url)
+                    ? 'border-l-3'
+                    : '',
                 )}
               >
                 <Link to={item.url}>
                   <item.icon
                     className={cn(
                       state === 'collapsed'
-                        ? 'scale-[1.4] hover:scale-[1.9]'
+                        ? 'scale-[1.4] hover:scale-[1.7]'
                         : 'scale-[1.3]',
                       'transition-all dark:text-white text-black',
-                      currentPath.includes(item.url) ? 'mx-0.5' : ''
+                      currentPath.includes(item.url) ? 'mx-0.5' : '',
                     )}
                   />
                   {state != 'collapsed' ? (

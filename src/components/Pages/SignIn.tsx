@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { login } from '@/store/slices/authSlice';
+import { setPrkPackage } from '@/store/slices/vaultSlice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { EyeNoneIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import * as motion from 'motion/react-client';
@@ -60,6 +61,14 @@ function SignIn() {
           username: res.username,
         },
         token: res.accessToken,
+      }),
+    );
+
+    dispatch(
+      setPrkPackage({
+        encPrkPass: res.encPrkPass,
+        saltPass: res.saltPass,
+        ivPass: res.ivPass,
       }),
     );
 

@@ -57,7 +57,8 @@ function App() {
               <Route index element={<WelcomePage />} />
               <Route path="dashboard" />
               <Route path="generator" />
-              <Route path="passwords" />
+              <Route path="vault" />
+              <Route path="account-settings" />
             </Route>
             {/* </Route> */}
           </Routes>

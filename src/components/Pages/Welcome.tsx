@@ -46,7 +46,7 @@ const WelcomePage = () => {
       className={`min-h-full transition-colors duration-500 ${
         theme === 'dark'
           ? 'bg-gradient-to-br from-zinc-800 via-gray-800 to-zinc-900 text-white'
-          : 'bg-gradient-to-br from-blue-100 to-blue-200 text-gray-900'
+          : 'bg-white text-gray-900'
       }`}
     >
       <div className="relative px-8 py-12 max-w-6xl mx-auto">

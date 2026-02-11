@@ -3,16 +3,18 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storageSession from 'redux-persist/es/storage/session';
 import authReducer from './slices/authSlice';
 import signUpReducer from './slices/signUpSlice';
+import vaultReducer from './slices/vaultSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   signUp: signUpReducer,
+  vault: vaultReducer,
 });
 
 const persistConfig = {
   key: 'lockbase',
   storage: storageSession,
-  whitelist: ['signUp', 'auth'],
+  whitelist: ['signUp', 'auth', 'vault'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

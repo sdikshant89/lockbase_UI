@@ -17,8 +17,9 @@ import {
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 import { logout } from '@/store/slices/authSlice';
+import { clearVault } from '@/store/slices/vaultSlice';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 export function NavUser({
   user,
@@ -33,10 +34,14 @@ export function NavUser({
   const { logoutAPI } = useLockbaseApi();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const username = pathSegments[0];
 
   const onLogout = async () => {
     await logoutAPI.logoutUser();
     dispatch(logout());
+    dispatch(clearVault());
     navigate('/sign-in');
   };
 
@@ -100,10 +105,12 @@ export function NavUser({
           </DropdownMenuGroup>
 
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => console.log('Account clicked')}>
-              <BadgeCheck />
-              Account
-            </DropdownMenuItem>
+            <Link to={`/${username}/account-settings`}>
+              <DropdownMenuItem>
+                <BadgeCheck />
+                <span>Account</span>
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
