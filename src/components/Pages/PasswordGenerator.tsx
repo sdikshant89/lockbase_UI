@@ -1,3 +1,9 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
@@ -132,6 +137,10 @@ function genPassword(params: {
 
   if (pool.length < 2) return '';
 
+  const requiredIncludes = Array.from(
+    new Set(params.customInclude.split('').filter((c) => pool.includes(c))),
+  );
+
   const numbersPool = params.charset.numbers ? '0123456789'.split('') : [];
   const symbolsPool = params.charset.symbols ? params.symbols.split('') : [];
   const lettersPool = [
@@ -155,6 +164,16 @@ function genPassword(params: {
   };
   if (!pushN(numbersPool, clamp(params.minNumbers, 0, length))) return '';
   if (!pushN(symbolsPool, clamp(params.minSymbols, 0, length))) return '';
+
+  // Ensure every required include character appears at least once.
+  if (requiredIncludes.length) {
+    for (const ch of requiredIncludes) {
+      if (out.length >= length) return '';
+      if (!out.includes(ch)) {
+        out.push(ch);
+      }
+    }
+  }
 
   while (out.length < length) {
     let next = pick(pool);
@@ -197,9 +216,9 @@ function ToneBar({
       <div
         className={cn(
           'h-3 rounded-full transition-all',
-          tone === 'good' && 'bg-emerald-500',
+          tone === 'good' && 'bg-amber-500',
           tone === 'ok' && 'bg-blue-500',
-          tone === 'warn' && 'bg-amber-500',
+          tone === 'warn' && 'bg-emerald-500',
           tone === 'bad' && 'bg-rose-500',
         )}
         style={{ width: `${clamp(percent, 6, 100)}%` }}
@@ -250,51 +269,89 @@ export default function PasswordGeneratorPage() {
   const canMinSymbols = charset.symbols && !isPin;
 
   function applyPreset(p: PresetKey) {
+    let nextLength = length;
+    let nextCharset = charset;
+    let nextMinNumbers = minNumbers;
+    let nextMinSymbols = minSymbols;
+    let nextAdvanced = advanced;
+
     setPreset(p);
     if (p === 'max') {
-      setLength(32);
-      setCharset({ upper: true, lower: true, numbers: true, symbols: true });
-      setMinNumbers(3);
-      setMinSymbols(3);
-      setAdvanced((a) => ({ ...a, beginWithLetter: false }));
+      nextLength = 25;
+      nextCharset = { upper: true, lower: true, numbers: true, symbols: true };
+      nextMinNumbers = 3;
+      nextMinSymbols = 3;
+      nextAdvanced = { ...advanced, beginWithLetter: false };
     } else if (p === 'balanced') {
-      setLength(16);
-      setCharset({ upper: true, lower: true, numbers: true, symbols: true });
-      setMinNumbers(2);
-      setMinSymbols(2);
-      setAdvanced((a) => ({ ...a, beginWithLetter: false }));
+      nextLength = 16;
+      nextCharset = { upper: true, lower: true, numbers: true, symbols: true };
+      nextMinNumbers = 2;
+      nextMinSymbols = 2;
+      nextAdvanced = { ...advanced, beginWithLetter: false };
     } else if (p === 'easy') {
-      setLength(12);
-      setCharset({ upper: true, lower: true, numbers: true, symbols: false });
-      setMinNumbers(2);
-      setMinSymbols(0);
-      setAdvanced((a) => ({
-        ...a,
+      nextLength = 12;
+      nextCharset = { upper: true, lower: true, numbers: true, symbols: false };
+      nextMinNumbers = 2;
+      nextMinSymbols = 0;
+      nextAdvanced = {
+        ...advanced,
         excludeSimilar: true,
         beginWithLetter: true,
-      }));
+      };
     } else if (p === 'pin') {
-      setLength(6);
-      setCharset({ upper: false, lower: false, numbers: true, symbols: false });
-      setMinNumbers(0);
-      setMinSymbols(0);
-      setAdvanced((a) => ({ ...a, beginWithLetter: false }));
+      nextLength = 6;
+      nextCharset = {
+        upper: false,
+        lower: false,
+        numbers: true,
+        symbols: false,
+      };
+      nextMinNumbers = 0;
+      nextMinSymbols = 0;
+      nextAdvanced = { ...advanced, beginWithLetter: false };
     }
-    // generate after state settles
-    setTimeout(() => regenerate(p), 0);
+
+    setLength(nextLength);
+    setCharset(nextCharset);
+    setMinNumbers(nextMinNumbers);
+    setMinSymbols(nextMinSymbols);
+    setAdvanced(nextAdvanced);
+
+    // Use the correct values for password generation
+    setTimeout(() => {
+      regenerate(p, {
+        length: nextLength,
+        charset: nextCharset,
+        minNumbers: nextMinNumbers,
+        minSymbols: nextMinSymbols,
+        advanced: nextAdvanced,
+      });
+    }, 0);
   }
 
-  function regenerate(p?: PresetKey) {
+  function regenerate(
+    p?: PresetKey,
+    override?: {
+      length: number;
+      charset: CharSet;
+      minNumbers: number;
+      minSymbols: number;
+      advanced: Advanced;
+    },
+  ) {
     const presetNow = p ?? preset;
-    const next = genPassword({
+    const params = override ?? {
       length,
       charset,
       minNumbers: clamp(minNumbers, 0, length),
       minSymbols: clamp(minSymbols, 0, length),
+      advanced,
+    };
+    const next = genPassword({
+      ...params,
       symbols,
       customInclude,
       customExclude,
-      advanced,
       pinOnly: presetNow === 'pin',
     });
 
@@ -429,10 +486,10 @@ export default function PasswordGeneratorPage() {
                     <div className="text-md font-medium">Strength</div>
                     <Badge
                       className={cn(
-                        'capitalize',
-                        s.tone === 'good' && 'bg-emerald-600',
+                        'capitalize text-white',
+                        s.tone === 'good' && 'bg-amber-600',
                         s.tone === 'ok' && 'bg-blue-600',
-                        s.tone === 'warn' && 'bg-amber-600',
+                        s.tone === 'warn' && 'bg-emerald-600',
                         s.tone === 'bad' && 'bg-rose-600',
                         'px-3 py-1.5',
                       )}
@@ -479,162 +536,187 @@ export default function PasswordGeneratorPage() {
                   Choose character types and constraints.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm">Password length</Label>
-                    <span className="text-sm text-muted-foreground">
-                      {length} chars
-                    </span>
-                  </div>
-                  <Slider
-                    value={[length]}
-                    min={6}
-                    max={64}
-                    step={1}
-                    onValueChange={(v) => setLength(v[0])}
-                  />
-                </div>
+              <CardContent>
+                <Accordion type="multiple" className="space-y-2">
+                  <AccordionItem value="length">
+                    <AccordionTrigger>
+                      Password length & Symbol
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 space-x-2 align-middle">
+                        <div>
+                          <Label>Symbol set</Label>
+                          <Input
+                            value={symbols}
+                            onChange={(e) => setSymbols(e.target.value)}
+                            placeholder="Default symbols"
+                          />
+                          <p className="text-xs text-muted-foreground">
+                            Keep conservative for legacy systems.
+                          </p>
+                        </div>
+                        <div>
+                          <div className="flex items-center justify-between mb-4">
+                            <Label className="text-sm">Character length</Label>
+                            <span className="text-sm text-muted-foreground">
+                              {length} chars
+                            </span>
+                          </div>
+                          <Slider
+                            value={[length]}
+                            min={6}
+                            max={25}
+                            step={1}
+                            onValueChange={(v) => setLength(v[0])}
+                          />
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                <Separator />
+                  <AccordionItem value="charset">
+                    <AccordionTrigger>Character Types</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <ToggleRow
+                          label="Uppercase"
+                          desc="A–Z"
+                          checked={charset.upper}
+                          onCheckedChange={(v) =>
+                            setCharset((c) => ({ ...c, upper: v }))
+                          }
+                        />
+                        <ToggleRow
+                          label="Lowercase"
+                          desc="a–z"
+                          checked={charset.lower}
+                          onCheckedChange={(v) =>
+                            setCharset((c) => ({ ...c, lower: v }))
+                          }
+                        />
+                        <ToggleRow
+                          label="Numbers"
+                          desc="0–9"
+                          checked={charset.numbers}
+                          onCheckedChange={(v) =>
+                            setCharset((c) => ({ ...c, numbers: v }))
+                          }
+                        />
+                        <ToggleRow
+                          label="Symbols"
+                          desc="!@#$…"
+                          checked={charset.symbols}
+                          onCheckedChange={(v) =>
+                            setCharset((c) => ({ ...c, symbols: v }))
+                          }
+                        />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <ToggleRow
-                    label="Uppercase"
-                    desc="A–Z"
-                    checked={charset.upper}
-                    onCheckedChange={(v) =>
-                      setCharset((c) => ({ ...c, upper: v }))
-                    }
-                  />
-                  <ToggleRow
-                    label="Lowercase"
-                    desc="a–z"
-                    checked={charset.lower}
-                    onCheckedChange={(v) =>
-                      setCharset((c) => ({ ...c, lower: v }))
-                    }
-                  />
-                  <ToggleRow
-                    label="Numbers"
-                    desc="0–9"
-                    checked={charset.numbers}
-                    onCheckedChange={(v) =>
-                      setCharset((c) => ({ ...c, numbers: v }))
-                    }
-                  />
-                  <ToggleRow
-                    label="Symbols"
-                    desc="!@#$…"
-                    checked={charset.symbols}
-                    onCheckedChange={(v) =>
-                      setCharset((c) => ({ ...c, symbols: v }))
-                    }
-                  />
-                </div>
+                  <AccordionItem value="advanced">
+                    <AccordionTrigger>Advanced Options</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <ToggleRow
+                          label="Exclude similar"
+                          desc="O/0, I/l/1"
+                          checked={advanced.excludeSimilar}
+                          onCheckedChange={(v) =>
+                            setAdvanced((a) => ({ ...a, excludeSimilar: v }))
+                          }
+                        />
+                        <ToggleRow
+                          label="Exclude ambiguous"
+                          desc="Brackets, quotes…"
+                          checked={advanced.excludeAmbiguous}
+                          onCheckedChange={(v) =>
+                            setAdvanced((a) => ({ ...a, excludeAmbiguous: v }))
+                          }
+                        />
+                        <ToggleRow
+                          label="Avoid repeats"
+                          desc="Less adjacent duplicates"
+                          checked={advanced.avoidRepeats}
+                          onCheckedChange={(v) =>
+                            setAdvanced((a) => ({ ...a, avoidRepeats: v }))
+                          }
+                        />
+                        <ToggleRow
+                          label="Begin with letter"
+                          desc="Some policies require this"
+                          checked={advanced.beginWithLetter}
+                          onCheckedChange={(v) =>
+                            setAdvanced((a) => ({ ...a, beginWithLetter: v }))
+                          }
+                        />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                <Separator />
-
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <ToggleRow
-                    label="Exclude similar"
-                    desc="O/0, I/l/1"
-                    checked={advanced.excludeSimilar}
-                    onCheckedChange={(v) =>
-                      setAdvanced((a) => ({ ...a, excludeSimilar: v }))
-                    }
-                  />
-                  <ToggleRow
-                    label="Exclude ambiguous"
-                    desc="Brackets, quotes…"
-                    checked={advanced.excludeAmbiguous}
-                    onCheckedChange={(v) =>
-                      setAdvanced((a) => ({ ...a, excludeAmbiguous: v }))
-                    }
-                  />
-                  <ToggleRow
-                    label="Avoid repeats"
-                    desc="Less adjacent duplicates"
-                    checked={advanced.avoidRepeats}
-                    onCheckedChange={(v) =>
-                      setAdvanced((a) => ({ ...a, avoidRepeats: v }))
-                    }
-                  />
-                  <ToggleRow
-                    label="Begin with letter"
-                    desc="Some policies require this"
-                    checked={advanced.beginWithLetter}
-                    onCheckedChange={(v) =>
-                      setAdvanced((a) => ({ ...a, beginWithLetter: v }))
-                    }
-                  />
-                </div>
-
-                <Separator />
-
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Include characters</Label>
-                    <Input
-                      value={customInclude}
-                      onChange={(e) => setCustomInclude(e.target.value)}
-                      placeholder="e.g. @_#"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Exclude characters</Label>
-                    <Input
-                      value={customExclude}
-                      onChange={(e) => setCustomExclude(e.target.value)}
-                      placeholder="e.g. O0Il1"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Symbol set</Label>
-                  <Input
-                    value={symbols}
-                    onChange={(e) => setSymbols(e.target.value)}
-                    placeholder="Default symbols"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Keep conservative for legacy systems.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Min numbers</Label>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={minNumbers}
-                      disabled={!canMinNumbers}
-                      onChange={(e) =>
-                        setMinNumbers(
-                          clamp(parseInt(e.target.value || '0', 10), 0, length),
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Min symbols</Label>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={minSymbols}
-                      disabled={!canMinSymbols}
-                      onChange={(e) =>
-                        setMinSymbols(
-                          clamp(parseInt(e.target.value || '0', 10), 0, length),
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+                  <AccordionItem value="custom">
+                    <AccordionTrigger>
+                      Custom Characters & Symbols
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mx-1">
+                        <div className="space-y-2">
+                          <Label>Include characters</Label>
+                          <Input
+                            value={customInclude}
+                            onChange={(e) => setCustomInclude(e.target.value)}
+                            placeholder="e.g. @_#"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Exclude characters</Label>
+                          <Input
+                            value={customExclude}
+                            onChange={(e) => setCustomExclude(e.target.value)}
+                            placeholder="e.g. O0Il1"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Min numbers</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            value={minNumbers}
+                            disabled={!canMinNumbers}
+                            onChange={(e) =>
+                              setMinNumbers(
+                                clamp(
+                                  parseInt(e.target.value || '0', 10),
+                                  0,
+                                  length,
+                                ),
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Min symbols</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            value={minSymbols}
+                            disabled={!canMinSymbols}
+                            onChange={(e) =>
+                              setMinSymbols(
+                                clamp(
+                                  parseInt(e.target.value || '0', 10),
+                                  0,
+                                  length,
+                                ),
+                              )
+                            }
+                          />
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end mt-4">
                   <Button
                     onClick={() => regenerate()}
                     className="gap-2 bg-purple-500 text-white hover:scale-105 transition-all duration-200"
