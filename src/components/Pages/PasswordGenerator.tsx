@@ -382,7 +382,7 @@ export default function PasswordGeneratorPage() {
       toast.warning('Copied!', {
         description: 'Password copied.',
       });
-    } catch (err) {
+    } catch {
       toast.warning('Copy failed', {
         description: 'Failed to copy password.',
       });
@@ -820,7 +820,7 @@ export default function PasswordGeneratorPage() {
                           toast.warning('Copied!', {
                             description: 'Password copied to clipboard.',
                           });
-                        } catch (err) {
+                        } catch {
                           toast.warning('Copy failed', {
                             description:
                               'Failed to copy password to clipboard.',
