@@ -6,6 +6,7 @@ import ForgotPassword from './components/Pages/ForgotPassword';
 import Home from './components/Pages/Home';
 import Mfa from './components/Pages/Mfa';
 import PasswordGeneratorPage from './components/Pages/PasswordGenerator';
+import PasswordListingPage from './components/Pages/PasswordListing';
 import RequireSignUpFlow from './components/Pages/RequireSignUpFlow';
 import SecQue from './components/Pages/SecQue';
 import SignIn from './components/Pages/SignIn';
@@ -58,7 +59,7 @@ function App() {
               <Route index element={<WelcomePage />} />
               <Route path="dashboard" />
               <Route path="generator" element={<PasswordGeneratorPage />} />
-              <Route path="vault" />
+              <Route path="vault" element={<PasswordListingPage />} />
               <Route path="account-settings" />
             </Route>
             {/* </Route> */}
