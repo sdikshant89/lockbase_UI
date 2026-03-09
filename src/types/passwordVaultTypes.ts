@@ -8,7 +8,7 @@ interface VaultState {
   prkPackage: PrkPackage | null;
 }
 
-export type SecretType = 'password' | 'pin' | 'api_key' | 'note' | 'other';
+export type SecretType = 'password' | 'pin' | 'api_key' | 'other';
 
 export interface Category {
   id: string;
