@@ -123,13 +123,12 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
   mode,
   initialValues,
   categories,
-  tags,
   onSubmit,
 }) => {
   const [showSecret, setShowSecret] = useState(false);
   const [localCategories, setLocalCategories] = useState(categories);
   const [newCategory, setNewCategory] = useState('');
-  const [localTags, setLocalTags] = useState(tags);
+
   const [tagInput, setTagInput] = useState('');
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     initialValues?.tags || [],
