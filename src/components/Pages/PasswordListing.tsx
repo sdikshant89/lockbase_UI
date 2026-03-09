@@ -6,6 +6,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
+  Category,
+  CredentialFormValues,
+  Tag as TagType,
+} from '@/types/passwordVaultTypes';
+import {
   ArrowRightIcon,
   Calendar,
   ChevronDown,
@@ -18,6 +23,7 @@ import {
   WandSparkles,
 } from 'lucide-react';
 import React from 'react';
+import CredentialDialog from '../custom/credential-dialog';
 import { Button } from '../ui/button';
 import { ButtonGroup } from '../ui/button-group';
 import { Input } from '../ui/input';
@@ -29,10 +35,37 @@ import {
   SelectTrigger,
 } from '../ui/select';
 
-const FILTERS = ['None', 'Email/ Username', 'Title', 'URL'];
+const FILTERS = ['Title', 'URL', 'Email/ Username'];
+
+// Mock data for demo
+const MOCK_CATEGORIES: Category[] = [
+  { id: '1', name: 'Work' },
+  { id: '2', name: 'Personal' },
+  { id: '3', name: 'Finance' },
+  { id: '4', name: 'Social Media' },
+];
+
+const MOCK_TAGS: TagType[] = [
+  { id: '1', name: 'important' },
+  { id: '2', name: '2fa' },
+  { id: '3', name: 'backup' },
+  { id: '4', name: 'legacy' },
+];
 
 export default function PasswordListingPage() {
-  const [filter, setFilter] = React.useState('None');
+  const [filter, setFilter] = React.useState('Title');
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogMode, setDialogMode] = React.useState<'add' | 'edit'>('add');
+
+  const handleAddCredential = () => {
+    setDialogMode('add');
+    setDialogOpen(true);
+  };
+
+  const handleCredentialSubmit = (values: CredentialFormValues) => {
+    console.log('Credential submitted:', values);
+    // TODO: Add backend call here
+  };
   return (
     <div className="h-full overflow-auto px-4 py-6">
       <div className="mx-5 w-auto">
@@ -61,7 +94,10 @@ export default function PasswordListingPage() {
                 <Button className="gap-2 bg-green-500 dark:bg-green-600  text-white hover:scale-105 transition-all duration-200">
                   <WandSparkles className="h-4 w-4" /> Generate
                 </Button>
-                <Button className="gap-2 bg-purple-500 text-white hover:scale-105 transition-all duration-200">
+                <Button
+                  className="gap-2 bg-purple-500 text-white hover:scale-105 transition-all duration-200"
+                  onClick={handleAddCredential}
+                >
                   <Plus className="h-4 w-4" /> Add Credential
                 </Button>
               </div>
@@ -120,10 +156,30 @@ export default function PasswordListingPage() {
                 <Button variant="secondary" className="gap-2">
                   <Calendar /> Last Updated
                 </Button>
+                <Button variant="link" className="text-indigo-400 text-md">
+                  Clear Filter
+                </Button>
               </div>
             </CardContent>
           </Card>
+
+          <div className="mx-4 my-6">
+            <div className="flex items-center justify-start gap-2 font-semibold text-md">
+              <Star className="h-5 w-5 text-[#b2fc05]" fill="#b2fc05" />
+              Pinned Favourites
+            </div>
+          </div>
         </div>
+
+        {/* Credential Dialog */}
+        <CredentialDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          mode={dialogMode}
+          categories={MOCK_CATEGORIES}
+          tags={MOCK_TAGS}
+          onSubmit={handleCredentialSubmit}
+        />
       </div>
     </div>
   );
