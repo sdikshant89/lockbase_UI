@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import {
   Category,
   CredentialFormValues,
@@ -15,6 +16,7 @@ import {
   Calendar,
   ChevronDown,
   Grid2x2,
+  Heart,
   List,
   ListFilterPlus,
   Plus,
@@ -56,6 +58,7 @@ export default function PasswordListingPage() {
   const [filter, setFilter] = React.useState('Title');
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [dialogMode, setDialogMode] = React.useState<'add' | 'edit'>('add');
+  const [isFavorite, setIsFavorite] = React.useState(false);
 
   const handleAddCredential = () => {
     setDialogMode('add');
@@ -144,8 +147,24 @@ export default function PasswordListingPage() {
                 </div>
               </div>
               <div className="flex items-center justify-start gap-4 mt-4">
-                <Button variant="secondary" className="gap-2">
-                  <Star /> Favourites
+                <Button
+                  onClick={() => setIsFavorite(!isFavorite)}
+                  variant="secondary"
+                  className={cn(
+                    'gap-2 transition-all duration-200',
+                    isFavorite
+                      ? 'shadow-red-400/70  shadow-lg'
+                      : 'hover:shadow-red-400/50 hover:shadow-md',
+                  )}
+                >
+                  <Heart
+                    className={cn(
+                      isFavorite
+                        ? 'fill-red-400 hover:fill-red-500 dark:fill-red-500 text-red-400 dark:text-red-500'
+                        : 'text-muted-foreground',
+                    )}
+                  />{' '}
+                  Favourites
                 </Button>
                 <Button variant="secondary" className="gap-2">
                   <Tag /> Tags <ChevronDown />

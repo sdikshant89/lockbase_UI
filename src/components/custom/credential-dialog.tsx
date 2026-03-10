@@ -230,18 +230,18 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg sm:max-w-xl md:max-w-2xl overflow-y-auto">
+      <DialogContent className="w-[95vw] sm:max-w-lg md:max-w-xl lg:max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader className="relative">
-          <DialogTitle className="text-2xl font-bold">
+          <DialogTitle className="text-xl sm:text-2xl font-bold">
             {mode === 'add' ? 'Add Credential' : 'Edit Credential'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs sm:text-sm">
             {mode === 'add'
               ? 'Securely store a new credential in your vault.'
               : 'Update your credential details.'}
           </DialogDescription>
         </DialogHeader>
-        <Separator />
+        <Separator className="my-2" />
 
         <Form {...form}>
           <form
@@ -250,10 +250,11 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
           >
             {/* Details Section */}
             <div>
-              <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                Details
+              <h3 className="flex items-center gap-1.5 text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
+                <span className="w-1 h-5 rounded-sm bg-green-500"></span>
+                <span>Details</span>
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 lg:gap-4">
                 <FormField
                   control={form.control}
                   name="title"
@@ -337,31 +338,38 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
 
             {/* Security Section */}
             <div>
-              <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                Security
+              <h3 className="flex items-center gap-1.5 text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
+                <span className="w-1 h-5 rounded-sm bg-orange-500/80 dark:bg-orange-600"></span>
+                <span>Security</span>
               </h3>
 
-              <div className="flex gap-4 mb-4">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4">
                 <FormField
                   control={form.control}
                   name="secretType"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Secret Type</FormLabel>
+                    <FormItem className="flex flex-col sm:w-32">
+                      <FormLabel className="text-xs sm:text-sm">
+                        Secret Type
+                      </FormLabel>
                       <FormControl>
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
                         >
-                          <SelectTrigger className="w-32 dark:bg-zinc-800">
+                          <SelectTrigger className="w-full sm:w-32 dark:bg-zinc-800 text-xs sm:text-sm">
                             {field.value === 'api_key'
                               ? 'API Key'
                               : field.value.charAt(0).toUpperCase() +
                                 field.value.slice(1)}
                           </SelectTrigger>
-                          <SelectContent className="dark:bg-zinc-900">
+                          <SelectContent className="dark:bg-zinc-900 text-xs sm:text-sm">
                             {secretTypes.map((type) => (
-                              <SelectItem key={type} value={type}>
+                              <SelectItem
+                                key={type}
+                                value={type}
+                                className="text-xs sm:text-sm"
+                              >
                                 {type === 'api_key'
                                   ? 'API Key'
                                   : type.charAt(0).toUpperCase() +
@@ -381,19 +389,21 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                   name="secretValue"
                   render={({ field }) => (
                     <FormItem className="flex-1 flex flex-col">
-                      <FormLabel>{getSecretLabel()}</FormLabel>
+                      <FormLabel className="text-xs sm:text-sm">
+                        {getSecretLabel()}
+                      </FormLabel>
                       <FormControl>
-                        <div className="flex items-center gap-2 w-full">
+                        <div className="flex items-center gap-1 sm:gap-2 w-full">
                           <Input
                             type={showSecret ? 'text' : 'password'}
                             placeholder={`Enter ${getSecretLabel().toLowerCase()}`}
                             {...field}
                             disabled={loading}
-                            className="flex-1 dark:bg-zinc-800"
+                            className="flex-1 dark:bg-zinc-800 text-xs sm:text-sm"
                           />
                           <Button
                             variant="ghost"
-                            size="icon"
+                            size="sm"
                             aria-label={
                               showSecret ? 'Hide secret' : 'Show secret'
                             }
@@ -402,14 +412,14 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                             className="hover:bg-gray-200 dark:hover:bg-zinc-700 flex-shrink-0"
                           >
                             {showSecret ? (
-                              <EyeOff className="h-4 w-4" />
+                              <EyeOff className="h-3 w-3 sm:h-4 sm:w-4" />
                             ) : (
-                              <Eye className="h-4 w-4" />
+                              <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                             )}
                           </Button>
                           <Button
                             variant="ghost"
-                            size="icon"
+                            size="sm"
                             aria-label="Copy secret to clipboard"
                             onClick={handleCopySecret}
                             type="button"
@@ -421,12 +431,12 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                             )}
                             title={copyFeedback ? 'Copied!' : 'Copy'}
                           >
-                            <Copy className="h-4 w-4" />
+                            <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                           {form.watch('secretType') === 'password' && (
                             <Button
                               variant="ghost"
-                              size="icon"
+                              size="sm"
                               aria-label="Generate random password"
                               type="button"
                               onClick={() => {
@@ -440,7 +450,7 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                               }}
                               className="hover:bg-gray-200 dark:hover:bg-zinc-700 flex-shrink-0"
                             >
-                              <WandSparkles className="h-4 w-4" />
+                              <WandSparkles className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
                           )}
                         </div>
@@ -456,17 +466,20 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
 
             {/* Organization Section */}
             <div>
-              <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                Organization
+              <h3 className="flex items-center gap-1.5 text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
+                <span className="w-1 h-5 rounded-sm bg-purple-500"></span>
+                <span>Organization</span>
               </h3>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <FormField
                   control={form.control}
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel className="text-xs sm:text-sm">
+                        Category
+                      </FormLabel>
                       <FormControl>
                         <Select
                           value={field.value?.id || ''}
@@ -484,14 +497,18 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                             }
                           }}
                         >
-                          <SelectTrigger className="w-full dark:bg-zinc-800">
+                          <SelectTrigger className="w-full dark:bg-zinc-800 text-xs sm:text-sm">
                             {field.value?.name || 'Select category'}
                           </SelectTrigger>
-                          <SelectContent className="dark:bg-zinc-900">
+                          <SelectContent className="dark:bg-zinc-900 text-xs sm:text-sm">
                             {localCategories.length > 0 && (
                               <>
                                 {localCategories.map((cat) => (
-                                  <SelectItem key={cat.id} value={cat.id}>
+                                  <SelectItem
+                                    key={cat.id}
+                                    value={cat.id}
+                                    className="text-xs sm:text-sm"
+                                  >
                                     {cat.name}
                                   </SelectItem>
                                 ))}
@@ -499,10 +516,14 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                             )}
                             <SelectItem
                               value="new"
-                              className="text-blue-600 dark:text-blue-400"
+                              className="text-blue-600 dark:text-blue-400 text-xs sm:text-sm"
                             >
                               <span className="flex items-center gap-2">
-                                <Plus className="h-4 w-4" /> Create new…
+                                <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+                                <span className="hidden sm:inline">
+                                  Create new…
+                                </span>
+                                <span className="sm:hidden">New</span>
                               </span>
                             </SelectItem>
                           </SelectContent>
@@ -514,12 +535,12 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                 />
 
                 {form.watch('category')?.id === 'new' && (
-                  <div className="flex gap-2 items-end">
+                  <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
                     <Input
                       value={newCategory}
                       onChange={(e) => setNewCategory(e.target.value)}
                       placeholder="New category name"
-                      className="flex-1 dark:bg-zinc-800"
+                      className="flex-1 dark:bg-zinc-800 text-xs sm:text-sm"
                     />
                     <Button
                       variant="secondary"
@@ -527,6 +548,7 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                       onClick={handleCategoryCreate}
                       type="button"
                       disabled={!newCategory.trim()}
+                      className="text-xs sm:text-sm"
                     >
                       Add
                     </Button>
@@ -539,13 +561,13 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                   name="tags"
                   render={() => (
                     <FormItem>
-                      <FormLabel>Tags</FormLabel>
-                      <div className="flex flex-wrap gap-2 mb-3 min-h-8">
+                      <FormLabel className="text-xs sm:text-sm">Tags</FormLabel>
+                      <div className="flex flex-wrap gap-2 mb-2 sm:mb-3 min-h-8">
                         {selectedTags.length > 0 ? (
                           selectedTags.map((tag) => (
                             <span
                               key={tag.id}
-                              className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full px-3 py-1 text-xs font-medium flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-200"
+                              className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full px-2 sm:px-3 py-1 text-xs font-medium flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-200"
                             >
                               {tag.name}
                               <button
@@ -565,7 +587,7 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                         )}
                       </div>
                       <FormControl>
-                        <div className="flex gap-2 items-center">
+                        <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                           <Input
                             value={tagInput}
                             onChange={handleTagInput}
@@ -584,16 +606,17 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                               }
                             }}
                             onPaste={handleTagPaste}
-                            placeholder="Add tag (enter or paste comma-separated)"
+                            placeholder="Add tag (comma-separated)"
                             disabled={loading}
-                            className="flex-1 dark:bg-zinc-800"
+                            className="flex-1 dark:bg-zinc-800 text-xs sm:text-sm"
                           />
                           <Button
                             variant="secondary"
-                            className="py-5"
+                            size="sm"
                             onClick={handleTagAdd}
                             type="button"
                             disabled={!tagInput.trim() || loading}
+                            className="text-xs sm:text-sm"
                           >
                             Add
                           </Button>
@@ -606,24 +629,27 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
               </div>
             </div>
 
-            <DialogFooter className="flex gap-3 pt-2">
+            <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-2 sm:pt-4">
               <Button
                 type="button"
                 variant="secondary"
                 disabled={loading}
+                size="sm"
                 onClick={() => {
                   form.reset();
                   setSelectedTags([]);
                   setTagInput('');
                   setShowSecret(false);
                 }}
+                className="text-xs sm:text-sm"
               >
                 Clear
               </Button>
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm"
               >
                 {loading
                   ? 'Saving...'
