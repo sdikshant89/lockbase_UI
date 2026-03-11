@@ -9,13 +9,14 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
-import { ChartLine, Key, WandSparkles } from 'lucide-react';
+import { ChartLine, Key, Layers2, WandSparkles } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { NavUser } from './nav-user';
 
 const items = [
   { title: 'Dashboard', url: 'dashboard', icon: ChartLine },
   { title: 'Vault', url: 'vault', icon: Key },
+  { title: 'Collections', url: 'collections', icon: Layers2 },
   { title: 'Generator', url: 'generator', icon: WandSparkles },
 ];
 

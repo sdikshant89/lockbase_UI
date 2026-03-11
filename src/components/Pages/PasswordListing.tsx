@@ -83,8 +83,6 @@ export default function PasswordListingPage() {
         </div>
 
         <div>
-          {/* Main */}
-
           <Card className="border-border/60">
             <CardHeader className="flex justify-between align-middle">
               <div>

@@ -393,7 +393,7 @@ export const CredentialDialog: React.FC<CredentialDialogProps> = ({
                         {getSecretLabel()}
                       </FormLabel>
                       <FormControl>
-                        <div className="flex items-center gap-1 sm:gap-2 w-full">
+                        <div className="flex items-center gap-1 w-full">
                           <Input
                             type={showSecret ? 'text' : 'password'}
                             placeholder={`Enter ${getSecretLabel().toLowerCase()}`}

@@ -38,4 +38,21 @@ export interface Credential extends CredentialFormValues {
   updatedAt: Date;
 }
 
+export interface Collection {
+  id: string;
+  name: string;
+  description?: string;
+  icon: string;
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CollectionFormValues {
+  name: string;
+  description?: string;
+  icon: string;
+  color: string;
+}
+
 export type { PrkPackage, VaultState };

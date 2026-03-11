@@ -4,6 +4,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from './components/custom/theme-provider';
 import ForgotPassword from './components/Pages/ForgotPassword';
 import Home from './components/Pages/Home';
+import ManageCollectionsPage from './components/Pages/ManageCollections';
 import Mfa from './components/Pages/Mfa';
 import PasswordGeneratorPage from './components/Pages/PasswordGenerator';
 import PasswordListingPage from './components/Pages/PasswordListing';
@@ -60,6 +61,7 @@ function App() {
               <Route path="dashboard" />
               <Route path="generator" element={<PasswordGeneratorPage />} />
               <Route path="vault" element={<PasswordListingPage />} />
+              <Route path="collections" element={<ManageCollectionsPage />} />
               <Route path="account-settings" />
             </Route>
             {/* </Route> */}
