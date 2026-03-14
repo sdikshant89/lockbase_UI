@@ -456,7 +456,7 @@ export default function PasswordGeneratorPage() {
                     )}
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex flex-col md:flex-row gap-2">
                     <Button
                       className="gap-2 bg-purple-500 text-white hover:scale-105 transition-all duration-200"
                       onClick={copyPwd}

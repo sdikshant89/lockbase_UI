@@ -41,7 +41,7 @@ export default function ManageCollectionsPage() {
   return (
     <div className="h-full overflow-auto px-4 py-6">
       <div className="mx-5 w-auto">
-        <div className="flex justify-between items-center gap-6">
+        <div className="flex justify-between items-center pr-6">
           <div className="mb-5 ml-1">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
               Manage Collections
@@ -53,7 +53,7 @@ export default function ManageCollectionsPage() {
           </div>
           <Button
             size="sm"
-            className="mr-7 gap-2 bg-purple-500 text-white hover:scale-105 transition-all duration-200 w-full sm:w-auto text-xs sm:text-sm"
+            className="gap-2 bg-purple-500 text-white hover:scale-105 transition-all duration-200 w-full sm:w-auto text-xs sm:text-sm"
             onClick={handleAddCollection}
           >
             <Plus className="h-3 w-3 sm:h-4 sm:w-4" /> Add Collection
@@ -61,7 +61,7 @@ export default function ManageCollectionsPage() {
         </div>
 
         <div>
-          <Card className="border-border/60">
+          <Card>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="flex items-center justify-start gap-2">
@@ -101,9 +101,7 @@ export default function ManageCollectionsPage() {
                   </ButtonGroup>
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <Button variant="link" className="text-indigo-400 text-md">
-                    Clear Filter
-                  </Button>
+                  <Button variant="outline">Clear Filter</Button>
                 </div>
               </div>
             </CardContent>
@@ -116,13 +114,13 @@ export default function ManageCollectionsPage() {
             <div className="flex items-center justify-center gap-2">
               <Button
                 variant="secondary"
-                className="gap-2 dark:bg-black bg-white"
+                className="gap-2 border-2 border-muted-foreground/40"
               >
                 <List /> List
               </Button>
               <Button
                 variant="secondary"
-                className="gap-2 dark:bg-black bg-white"
+                className="gap-2 border-2 border-muted-foreground/40"
               >
                 <Grid2x2 /> Grid
               </Button>

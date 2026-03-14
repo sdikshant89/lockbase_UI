@@ -25,42 +25,13 @@ import {
 import { cn } from '@/lib/utils';
 import { CollectionFormValues } from '@/types/passwordVaultTypes';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Briefcase,
-  ChevronDown,
-  Cloud,
-  CreditCard,
-  Database,
-  Folder,
-  Globe,
-  Key,
-  Search,
-  Server,
-  ShieldCheck,
-  Smartphone,
-  User,
-  Wallet,
-} from 'lucide-react';
+import { ChevronDown, Search } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { COLLECTION_ICONS } from '../icons/IconList';
 import { Textarea } from '../ui/textarea';
-
-const COLLECTION_ICONS = [
-  { name: 'Work', icon: Briefcase, id: 'work' },
-  { name: 'Personal', icon: User, id: 'personal' },
-  { name: 'Finance', icon: Wallet, id: 'finance' },
-  { name: 'Payments', icon: CreditCard, id: 'payments' },
-  { name: 'Security', icon: ShieldCheck, id: 'security' },
-  { name: 'Keys', icon: Key, id: 'keys' },
-  { name: 'Websites', icon: Globe, id: 'websites' },
-  { name: 'Servers', icon: Server, id: 'servers' },
-  { name: 'Database', icon: Database, id: 'database' },
-  { name: 'Devices', icon: Smartphone, id: 'devices' },
-  { name: 'Cloud', icon: Cloud, id: 'cloud' },
-  { name: 'General', icon: Folder, id: 'general' },
-];
 
 const collectionSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -136,7 +107,7 @@ export const CollectionDialog: React.FC<CollectionDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full md:min-w-2xl max-h-fit overflow-hidden border border-border/60 bg-background p-0 shadow-2xl">
+      <DialogContent className="w-full md:min-w-2xl max-h-[90vh] overflow-auto border border-border/60 bg-background p-0 shadow-2xl">
         <DialogHeader className="border-b border-border/60 px-6 pt-5 pb-2">
           <DialogTitle className="text-2xl font-semibold tracking-tight">
             {mode === 'add' ? 'Create Collection' : 'Edit Collection'}
@@ -161,29 +132,29 @@ export const CollectionDialog: React.FC<CollectionDialogProps> = ({
                         Select Icon
                       </FormLabel>
                       <FormControl>
-                        <Popover>
+                        <Popover modal={true}>
                           <PopoverTrigger asChild>
                             <button
                               type="button"
                               disabled={loading}
                               className={cn(
-                                'w-full rounded-2xl border bg-background p-3 transition-all',
+                                'w-full rounded-2xl border bg-background p-2 sm:p-3 transition-all',
                                 ' hover:bg-accent/20',
                                 'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
                                 loading && 'cursor-not-allowed opacity-60',
                               )}
                             >
                               <div className="flex flex-col items-center text-center">
-                                <div className="flex h-24 w-24 items-center justify-center rounded-3xl transition-all">
+                                <div className="flex h-16 w-16 sm:h-24 sm:w-24 items-center justify-center rounded-3xl transition-all">
                                   {SelectedIconComponent ? (
                                     <SelectedIconComponent
-                                      className="h-16 w-16"
+                                      className="h-12 w-12 sm:h-16 sm:w-16"
                                       style={{ color: watchedColor }}
                                     />
                                   ) : null}
                                 </div>
                                 <div>
-                                  <span className="text-sm text-muted-foreground">
+                                  <span className="text-xs sm:text-sm text-muted-foreground">
                                     Click to select icon
                                   </span>
                                 </div>
@@ -193,24 +164,27 @@ export const CollectionDialog: React.FC<CollectionDialogProps> = ({
 
                           <PopoverContent
                             align="center"
-                            className="w-[280px] rounded-2xl p-0"
+                            className="w-[90vw] sm:w-[70vw] md:w-[18vw] rounded-2xl p-0"
                           >
                             <div className="border-b border-border/60 p-3">
-                              <div className="flex items-center gap-2 rounded-xl border border-border/60 dark:bg-black bg-muted px-3 py-2">
-                                <Search className="h-4 w-4 text-muted-foreground" />
+                              <div className="flex items-center gap-2 rounded-xl border border-border/60 dark:bg-black bg-muted px-2 sm:px-3 py-2">
+                                <Search className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                                 <input
-                                  placeholder="Search icons..."
+                                  placeholder="Search... (scroll for more)"
                                   value={iconSearchQuery}
                                   onChange={(e) =>
                                     setIconSearchQuery(e.target.value)
                                   }
                                   disabled={loading}
-                                  className="w-full text-sm outline-none placeholder:text-muted-foreground"
+                                  className="w-full text-sm sm:text-sm outline-none placeholder:text-muted-foreground"
                                 />
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-4 gap-2 p-3">
+                            <div
+                              className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 gap-1 sm:gap-2 p-2 sm:p-3 max-h-[12rem] overflow-y-auto"
+                              style={{ minHeight: '5.5rem' }}
+                            >
                               {filteredIcons.length > 0 ? (
                                 filteredIcons.map((iconItem) => {
                                   const Icon = iconItem.icon;
@@ -218,36 +192,43 @@ export const CollectionDialog: React.FC<CollectionDialogProps> = ({
                                     field.value === iconItem.id;
 
                                   return (
-                                    <button
-                                      key={iconItem.id}
-                                      type="button"
-                                      disabled={loading}
-                                      onClick={() =>
-                                        field.onChange(iconItem.id)
-                                      }
-                                      className={cn(
-                                        'group relative flex flex-col items-center gap-2 rounded-2xl p-3 transition-all',
-                                        isSelected
-                                          ? 'border-primary bg-primary/8 shadow-sm'
-                                          : 'bg-muted dark:bg-black hover:border-primary/40 hover:bg-accent/30',
-                                      )}
-                                      title={iconItem.name}
-                                    >
-                                      <div className="flex items-center justify-center rounded-xl transition-all">
-                                        <Icon
-                                          className="h-7 w-7"
-                                          style={
-                                            isSelected
-                                              ? { color: watchedColor }
-                                              : undefined
-                                          }
-                                        />
+                                    <div className="flex flex-col items-center justify-center gap-1 mb-1">
+                                      <button
+                                        key={iconItem.id}
+                                        type="button"
+                                        disabled={loading}
+                                        onClick={() =>
+                                          field.onChange(iconItem.id)
+                                        }
+                                        className={cn(
+                                          'group relative flex flex-col items-center gap-0 sm:gap-2 rounded-2xl p-2 sm:p-3 transition-all',
+                                          isSelected
+                                            ? 'border-primary bg-primary/8 shadow-sm'
+                                            : 'bg-muted dark:bg-black hover:border-primary/40 hover:bg-accent/30',
+                                        )}
+                                        title={iconItem.name}
+                                      >
+                                        <div className="flex items-center justify-center rounded-xl transition-all">
+                                          <Icon
+                                            className="h-7 w-7"
+                                            style={
+                                              isSelected
+                                                ? { color: watchedColor }
+                                                : undefined
+                                            }
+                                          />
+                                        </div>
+                                      </button>
+                                      <div className="text-center items-center mb-1 sm:mb-0">
+                                        <span className="text-xs text-muted-foreground">
+                                          {iconItem.name}
+                                        </span>
                                       </div>
-                                    </button>
+                                    </div>
                                   );
                                 })
                               ) : (
-                                <p className="col-span-4 py-6 text-center text-sm text-muted-foreground">
+                                <p className="col-span-3 sm:col-span-4 md:col-span-4 py-6 text-center text-xs sm:text-sm text-muted-foreground">
                                   No icons found
                                 </p>
                               )}

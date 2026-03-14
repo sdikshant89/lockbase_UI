@@ -182,7 +182,10 @@ export default function PasswordListingPage() {
 
           <div className="mx-4 my-6">
             <div className="flex items-center justify-start gap-2 font-semibold text-md">
-              <Star className="h-5 w-5 text-[#b2fc05]" fill="#b2fc05" />
+              <Star
+                className="h-5 w-5 dark:text-[#b2fc05] text-black/30"
+                fill="#b2fc05"
+              />
               Pinned Favourites
             </div>
           </div>
